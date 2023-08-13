@@ -471,7 +471,7 @@ void main() {
 ```
 
 ## 연산자 우선순위
-- 우선순위	연산자	우선순위가 같은 경우에 식을 계산하는 방법
+
 |순위| 연산자| 우선순위가 같은 경우에 식을 계산하는 방법|
 |----|------|---------------------------------|
 |1 |( ) [ ] -> .|	왼쪽에서 오른쪽으로(From left to right)|
@@ -482,10 +482,10 @@ void main() {
 |6|< > <= >=	|왼쪽에서 오른쪽으로(From left to right)|
 |7|== !=	|왼쪽에서 오른쪽으로(From left to right)|
 |8|&(비트연산)	|왼쪽에서 오른쪽으로(From left to right)|
-|9|^	|왼쪽에서 오른쪽으로(From left to right)|
-|10| |	|왼쪽에서 오른쪽으로(From left to right)|
+|9| ^	|왼쪽에서 오른쪽으로(From left to right)|
+|10| \|	|왼쪽에서 오른쪽으로(From left to right)|
 |11|&&	|왼쪽에서 오른쪽으로(From left to right)|
-|12| ||	|왼쪽에서 오른쪽으로(From left to right)|
+|12| \|\| |왼쪽에서 오른쪽으로(From left to right)|
 |13|?(삼 항 연산자) |오른쪽에서 왼쪽으로(From right to left)|
 |14|= += -= *= /= %= &= ^= |= «=  »= | 오른쪽에서 왼쪽으로(From right to left)|
 |15|,(Comma) | 왼쪽에서 오른쪽으로(From left to right)|
