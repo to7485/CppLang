@@ -487,7 +487,7 @@ void main() {
 |11|&&	|왼쪽에서 오른쪽으로(From left to right)|
 |12| \|\| |왼쪽에서 오른쪽으로(From left to right)|
 |13|?(삼 항 연산자) |오른쪽에서 왼쪽으로(From right to left)|
-|14|= += -= *= /= %= &= ^= |= «=  »= | 오른쪽에서 왼쪽으로(From right to left)|
+|14|= += -= *= /= %= &= ^= \|= «=  »= | 오른쪽에서 왼쪽으로(From right to left)|
 |15|,(Comma) | 왼쪽에서 오른쪽으로(From left to right)|
 
 
