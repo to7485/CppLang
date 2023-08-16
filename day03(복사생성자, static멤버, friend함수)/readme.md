@@ -400,6 +400,109 @@ void main() {
 }
 ```
 
+# 클래스의 활용
+
+## 문자를 저장하는 스택 클래스 - CharStack
+- 스택은 데이터를 저장하는 자료구조의 하나로서, 마치 밑이 막힌 원통에 구슬을 넣거나 꺼내는 것과 같은 방식으로 동작한다.
+- 입력한 데이터는 차례로 스택에 쌓이며, 데이터를 꺼낼 때에는 입력된 순서의 역순, 즉 마지막에 넣은 데이터가 가장 먼저 인출(Last In First Out, LIFO)되는 특성을 갖는다.
+- 데이터를 저장하는 연산을 push라고 부른다.
+- 데이터를 꺼내는 연산을 pop이라고 한다.
+- 이러한 방식으로 문자 데이터를 저장하는 스택을 클래스로 표현해 보고자 한다.
+
+## CharStack클래스
+- 문자를 최대 20개까지 저장할 수 있는 스택을 나타내는 클래스를 선언하라.
+- 스택 객체는 데이터를 저장(push)하거나 인출(pop)할 수 있으며, 스택이 비어 있는지 가득 차 있는지 검사할 수 있다.
+- 또한 이 스택을 이용하여 입력된 단어를 역순으로 출력하는 프로그램을 작성하라.
+
+## CharStack클래스의 메서드
+|메서드|비고|
+|----|-------|
+|CharStack()|생성자|
+|bool chkEmpty()|스택이 비어있는지 검사|
+|bool chkFull()|스택이 가득 차 있는지 검사함|
+|bool push(char)|스택에 데이터를 저장함|
+|char pop() | 스택에서 데이터를 삭제함|
+
+## CharStack.h
+```c
+#ifndef CHARSTACK_H_INCLUDED
+#define CHARSTACK_H_INCLUDED
+
+class CharStack {
+	//열거형은 사용하면 변수가 갖는 값에 의미를 부여할 수 있고 프로그램 가독성이 향상됩니다.
+	//열거형은 명명된 정수형 상수의 집합으로 구성됩니다.
+	//열거형을 선언하면 컴파일러는 열거형 멤버들을 정수형 상수로 인식합니다.
+	enum {size = 20}; //스택의 크기
+	int top;		//마지막 데이터를 가리키는 포인터
+	char buf[size]; //스택의 저장공간
+
+public:
+	//데이터는 buf[19]로부터 시작하여 차례로 위에 쌓는다. 
+	CharStack() : top{ size } {}; //생성자
+	bool chkEmpty() const { //스택에 데이터가 없으면 true
+		return top == size;
+	}
+	bool chkFull() const { //스택이 가득 차 있으면 true
+		return !top;
+	}
+	bool push(char ch); //스택에 데이터를 넣음
+	char pop();			//스택에서 데이터를 꺼냄
+};
+
+
+#endif
+```
+
+## CharStack.cpp
+```c
+#include <iostream>
+#include "CharStack.h"
+using namespace std;
+
+bool CharStack::push(char ch) {
+	if(chkFull()) {
+		cout << "스택이 가득 차 있습니다." << endl;
+		return false;
+	}
+	buf[--top] = ch;
+	return true;
+}
+
+char CharStack::pop() {
+	if (chkEmpty()) {
+		cout << "스택에 데이터가 없습니다." << endl;
+		return 0;
+	}
+	return buf[top++];
+}
+```
+## CSMain.cpp
+```c
+#include <iostream>
+#include "CharStack.h"
+using namespace std;
+
+void main() {
+	CharStack chStack; //20개의 문자를 저장할 수 있는 스택
+	char str[20];
+
+	cout << "영어 단어를 입력하시오 : ";
+	cin >> str;
+
+	char* pt = str; //포인터로 문자열 시작 위치 가리킴
+	while (*pt) {	//문자열의 끝이 아니라면 반복
+		chStack.push(*(pt++)); //스택에 문자를 넣음
+	}
+
+	cout << "역순 단어 출력 : ";
+	while (!chStack.chkEmpty()) { //스택이 비어 있지 않으면 반복
+		cout << chStack.pop(); //스택에서 인출한 문자를 출력
+	}
+	cout << endl;
+}
+```
+
+
 # friend 함수
 - 프렌드를 쓰는 이유는 친구나 동료처럼 수평적인 관계의 클래스간의 멤버 변수를 공유해야 할 경우 주로 쓰인다.
 - 예를 들면 하나의 클래스에서 다른 클래스의 내부 데이터에 접근 해야할 경우 프렌드를 써서 권한을 주는 경우를 예로 들수 있다.
