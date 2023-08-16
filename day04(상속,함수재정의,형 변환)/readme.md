@@ -273,7 +273,75 @@ public:      // 사용자에게 공개하여야 할 기능
 |protected |- 소속 클래스의 멤버함수<br>- 친구클래스의 멤버함수 및 친구함수<br>- 파생 클래스의 멤버함수<br>- 파생클래스의 친구 클래스의 멤버함수 및 친구함수|
 |public|- 전범위|
 
+### 접근제어의 상속
+|접근제어자 상속|B의 public 멤버는| B의 protected멤버는|
+|-----|-----|-------------|-------------------|
+|class D1 : private B{....};|D1의 private 멤버| D1의 private 멤버|
+|class D2 : protected B{....}; |D2의 protected 멤버| D2의 protected 멤버|
+|class D3 : public B{....};|D3의 public 멤버| D3의 protected 멤버|
 
+## Access.cpp
+```c
+#include <iostream>
+using namespace std;
+
+class BaseC {
+	int a; //private 멤버
+protected:
+	int b; //protected 멤버
+public:
+	int c; //public 멤버
+	int geta() const { return a; } //OK : 소속 멤버 사용
+	void set(int x, int y, int z) { a = x, b = y, c = z; } //OK
+};
+
+class Drvd1 : public BaseC {
+	//class BaseC의 멤버변수 a는 class Drvd1이 액세스 할 수 없음
+	//class BaseC의 멤버변수 b는 class Drvd1의 protected로 취급되고
+	//class BaseC의 멤버변수 c는 class Drvd1의 public으로 취급됨
+	//b와 c는 이 클래스가 액세스 할 수 있음
+public:
+	//int sum() const { return a + b + c; }//error : a를 사용
+	void printbc() const { cout << b << ' ' << c << '\n'; }//OK
+};
+
+class Drvd2 : protected BaseC {
+	//class BaseC의 멤버변수 a는 class Drvd2가 액세스 할 수 없음
+	//class BaseC의 멤버변수 b와 c는 class Drvd2의 protected로 취급됨
+	//b와 c는 class Drvd2가 액세스 할 수 있음
+public:
+	//int sum() const {return a + b + c;}
+	void printbc() const { cout << b << ' ' << c << '\n'; }//OK
+
+};
+class Drvd3 : protected BaseC {
+	//class BaseC의 멤버변수 a는 class Drvd3가 액세스 할 수 없음
+	//class BaseC의 멤버변수 b와 c는 class Drvd3의 private로 취급됨
+	//b와 c는 class Drvd3가 액세스 할 수 있음
+public:
+	//int sum() const {return a + b + c;}
+	void printbc() const { cout << b << ' ' << c << '\n'; }//OK
+
+};
+
+void main() {
+	Drvd1 d1;
+	d1.a = 1; //private 멤버를 액세스 하므로 error
+	d1.b = 2; //protected 멤버를 액세스 하므로 error
+	d1.c = 3; //public멤버를 액세스 하므로 OK
+
+	Drvd2 d2;
+	d2.a = 1; //private 멤버를 액세스 하므로 error
+	d2.b = 2; //protected로 취급되는 멤버를 액세스 하므로 error
+	d2.c = 3; //protected로 취급되는 멤버를 액세스 하므로 error
+
+	Drvd3 d3;
+	d3.a = 1; //private 멤버를 액세스 하므로 error
+	d3.b = 2; //protected로 취급되는 멤버를 액세스 하므로 error
+	d3.c = 3; //protected로 취급되는 멤버를 액세스 하므로 error
+
+}
+```
 
 
 
