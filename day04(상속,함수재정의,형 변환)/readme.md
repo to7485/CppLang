@@ -56,6 +56,10 @@ class 파생클래스명 : 접근제어자 기초클래스명 {
 using namespace std;
 
 class Person {
+//C++ 표준 라이브러리에는 string이라는 문자열을 저장할 수 있는 클래스를 제공한다.
+//사실 이 클래스는 basic_string<char>라는 표준 C++ 라이브러리의 클래스 템플릿으로 선언된 것이다.
+//string 클래스는 여러 가지 연산자를 제공하고 있다.
+//앞으로는 C 스타일의 문자열 대신 string을 이용하게 될 것이다.
 	string name;
 
 public:
@@ -137,15 +141,137 @@ class Rectangle : public Polygon
 ```
 - 클래스 간의 관계를 클래스 계층이라고 한다.
 
+## 파생 클래스의 생성자 및 소멸자
+- 파생 클래스도 생성자가 필요한 경우가 있다.
+- 기초 클래스가 생성자를 가지고 있다면, 파생 클래스의 생성자는 기초 클래스의 생성자를 호출하고 나머지 필요한 부분만 정의한다.
 
+### 파생 클래스의 생성자의 표현
+```c
+DClassName(fParameterList) : BClassName(bArgsList)
 
+{
 
+	파생 클래스 생성자에서 추가되는 사항
 
+}
+※ DClassName : 생성자 - 파생 클래스 이름을 사용
+※ BClassName : 기초 클래스 생성자 - 기초 클래스 이름을 사용
+※ fParameterList : 파생 클래스 생성자 형식 매개변수 목록
+※ bArgsList : 기초 클래스 생성자에 전달할 인수 목록
+```
+- 기초 클래스의 생성자가 인수를 필요로 하면, 그 인수들을 넘겨주어야 한다.
+- 파생 클래스는 기초 클래스를 바탕으로 만들어지는 것이므로, 파생 클래스의 생성자가 수행될 때 기초 클래스의 생성자가 먼저 호출되어 실행되고, 그 다음에 파생 클래스에서 구현한 명령문들이 실행된다.
+- 파생 클래스의 소멸자를 정의할 때에는 파생 클래스의 정리작업만 하면 된다.
+- 이때 기초 클래스의 소멸자는 자동으로 호출된다.
+- 파생 클래스의 소멸자에 나열된 명령문들이 먼저 실행된 다음에 기초 클래스의 소멸자가 실행된다.
 
+## Person2.h
+```c
+#ifndef PERSON1_H_INCLUDED
+#define PERSON1_H_INCLUDED
+#include <iostream>
+#include <string>
+using namespace std;
 
+class Person {
+	string name;
 
+public:
+	Person(const string &n) {
+		cout << "Person의 생성자" << endl;
+		name = n;
+	}
+	~Person() {
+		cout << "Person의 소멸자" << endl;
+	}
+	string getName() const {
+		return name;
+	}
 
+	void print() const {
+		cout << name;
+	}
+};
+#endif
+```
 
+## Student2.h
+```c
+#ifndef STUDENT1_H_INCLUDED
+#define STUDENT1_H_INCLUDED
+#include <iostream>
+#include <string>
+#include "Person1.h"
+
+class Student : public Person {
+	string school;
+public:
+	Student(const string &n, const string &s) :Person(n) {
+		cout << "Student의 생성자" << endl;
+		school = s;
+	}
+
+	~Student() {
+		cout << "Student의 소멸자" << endl;
+	}
+
+	string getSchool() const {
+		return school;
+	}
+	void print() const {
+		Person::print();
+		cout << "goes to " << school;
+	}
+};
+#endif
+
+```
+
+## StudentMain2.cpp
+```c
+#include <iostream>
+#include "Person2.h"
+#include "Student2.h"
+using namespace std;
+
+void main() {
+	Student harry("Harry", "Hogwarts");
+	cout << harry.getName() << "goes to " << harry.getSchool() << endl;
+}
+```
+
+## 액세스 제어
+- 클래스는 다른 클래스들이나 외부 함수가 자신의 멤버함수들을 액세스하는 것을 허가하거나 금지함으로써 클래스 자신을 보호하는 기능이 있다.
+- 일반적으로 파생 클래스를 갖지 않는 경우에는 클래스는 private 멤버와 public 멤버를 갖도록 설계한다.
+- 예를 들어 현금인출기를 생각해 보자.
+- 현금인출기의 기능 중에는 인출기를 사용하는 사람에게 공개하여야 할 기능들이 있고, 사용자에게 공개할 필요가 없는 기능 또는 공개하지 말아야 할 기능이 있을 수 있다.
+```c
+class 현금인출기 {
+
+private:     // 사용자에게 공개할 필요가 없거나 하지 말아야 할 기능
+
+	출금할 돈을 채운다.
+
+	명세서를 출력한다.
+
+	계좌의 잔고를 계산한다.
+
+	전산망에 연결하여 계좌의 정보를 가져온다.
+
+public:      // 사용자에게 공개하여야 할 기능
+
+	돈을 인출한다.
+
+	계좌번호와 비밀번호를 입력한다.
+
+};
+```
+### 접근제어자와 공개영역
+|접근제어자|사용범위|
+|-----|-----|
+|private|- 소속 클래스의 멤버함수<br>- 친구 클래스의 멤버함수 및 친구함수|
+|protected |- 소속 클래스의 멤버함수<br>- 친구클래스의 멤버함수 및 친구함수<br>- 파생 클래스의 멤버함수<br>- 파생클래스의 친구 클래스의 멤버함수 및 친구함수|
+|public|- 전범위|
 
 
 
