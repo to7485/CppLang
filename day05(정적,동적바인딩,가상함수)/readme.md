@@ -22,7 +22,7 @@ void main() {
 	Person dudley("Dudley");
 	Student harry("Harry", "Hogwarts");
 	Student *pStdnt;
-	pPrsn1 = &dudley; //기초 클래스의 포인터기 기초 클래스의 객체를 가리키므로 문제 없음
+	pPrsn1 = &dudley; //기초 클래스의 포인터가 기초 클래스의 객체를 가리키므로 문제 없음
 	pPrsn2 = &harry; //기초 클래스의 포인터가 파생 클래스 객체를 가리키므로 문제 없음
 	pStdnt = &dudley; //파생클래스의 포인터가 기초 클래스의 객체를 가리키므로 에러이다.
 /////////////////////////////////////
@@ -212,4 +212,116 @@ Ron goes to Hogwarts
 - 실제로 연결된 객체가 무엇이든 관계없이 Person 클래스의 print()가 호출되었다.
 - 그러나 이제는 p[]의 원소들이 가리키는 객체가 Person 객체라면 Person 클래스의 print()가, Student 객체라면 Student 클래스의 print()가 호출된 것을 볼 수 있다.
 - 이와 같이 가상함수를 사용하여 동적 연결을 하면 포인터에 연결된 객체에 맞게 자동적으로 멤버함수가 선택된다.
+
+# 캐스팅
+- 객체지향에서 캐스팅이란 형변환을 의미한다.
+- 업 캐스팅, 다운 캐스팅은 상속 관계에 있는 객체 간에 일어난다.
+- 상속 관계의 클래스들은 다형성에 의하여 서로의 객체 포인터가 다른 타입의 객체를 가리킬 수 있다.
+
+## 업캐스팅
+- 파생 클래스를 기초 클래스로 변환하는 것을 업캐스팅(up-casting)이라고 한다.
+
+## Upcasting.cpp
+```c
+#include <iostream>
+using namespace std;
+
+class Base {
+public:
+	Base() {}
+	void print_base() {
+		cout << "Base\n";
+	}
+};
+
+class Derived : public Base {
+public:
+	Derived() { }
+
+	void print_derived() {
+		std::cout << "Derived\n";
+	}
+};
+
+int main() {
+	Derived derived;
+	Derived* pDerived = &derived;
+
+	Base* pBase = pDerived;
+	//기초 클래스가 파생 클래스 객체를 가리키고 있다고 파생 클래스를 그 자체로 사용할 수 있는 것은 아니다.
+	//pBase 객체가 Base의 포인터라고 알고 있기 때문에 Base의 멤버만 접근하게 된다.
+	//pBase->print_derived();
+}
+```
+
+## 다운캐스팅
+- 기초 클래스를 파생 클래스로 변환하는 것을 다운캐스팅(down-casting)이라고 한다.
+
+## DownCasting.cpp
+```c
+#include <iostream>
+
+class Base {
+public:
+	Base() { }
+
+	void base_func() {}		// +
+	virtual void print() {
+		std::cout << "Base\n";
+	}
+};
+
+class Derived : public Base {
+public:
+	Derived() { }
+
+	void derived_func() {}	// +
+	void print() {
+		std::cout << "Derived\n";
+	}
+};
+
+int main() {
+	Derived derived;
+	Derived* pDerived = &derived;
+
+	Base* pBase = pDerived;
+	pBase->print();
+	//pBase 객체는 Derived 클래스의 멤버를 사용할 수 없다. 
+	//pBase 객체가 derived_func() 함수를 호출하려 하면 에러를 일으킨다.
+	pBase->derived_func();
+
+	//이때 pBase 객체에 Derived * 타입으로의 명시적 형변환을 달고 Derived *로 강제 형변환을 해줄 수 있는데,
+	//이것이 다운 캐스팅이다.
+	Derived* down_object = (Derived*)pBase;
+
+	//이렇게 되면 pBase에서 접근할 수 없었던 Derived 클래스의 멤버에 접근할 수 있게 된다.
+	down_object->derived_func();
+}
+```
+# 멤버함수의 재정의
+- 다음 멤버들은 고유한 처리를 담당하기 때문에 상속의 대상에서 제외된다.
+    - 생성자와 소멸자
+    - 대입 연산자
+    - 정적 멤버
+    - friend 관계지정
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
