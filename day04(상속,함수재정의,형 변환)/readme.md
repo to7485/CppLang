@@ -275,7 +275,7 @@ public:      // 사용자에게 공개하여야 할 기능
 
 ### 접근제어의 상속
 |접근제어자 상속|B의 public 멤버는| B의 protected멤버는|
-|-----|-----|-------------|-------------------|
+|-----|-----|-------------|
 |class D1 : private B{....};|D1의 private 멤버| D1의 private 멤버|
 |class D2 : protected B{....}; |D2의 protected 멤버| D2의 protected 멤버|
 |class D3 : public B{....};|D3의 public 멤버| D3의 protected 멤버|
