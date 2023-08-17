@@ -221,6 +221,10 @@ Ron goes to Hogwarts
 ## 업캐스팅
 - 파생 클래스를 기초 클래스로 변환하는 것을 업캐스팅(up-casting)이라고 한다.
 
+```c
+상위클래스* 클래스명 = new 하위클래스;
+```
+
 ## Upcasting.cpp
 ```c
 #include <iostream>
@@ -256,6 +260,10 @@ int main() {
 
 ## 다운캐스팅
 - 기초 클래스를 파생 클래스로 변환하는 것을 다운캐스팅(down-casting)이라고 한다.
+
+```c
+하위클래스* 클래스명 = (하위클래스*)업캐스팅된 상위클래스변수;
+```
 
 ## DownCasting.cpp
 ```c
@@ -306,7 +314,39 @@ int main() {
     - 정적 멤버
     - friend 관계지정
 
+```c
+#include <iostream>
+using namespace std;
 
+class Base {
+public:
+	void f() {
+		cout << "Base::f() called" << endl;
+	}
+};
+
+class Derived : public Base {
+public:
+	void f() {
+		cout << "Derived::f() called" << endl;;
+	}
+};
+
+
+
+void main() {
+	Derived d, *pDer;//파생클래스 Derived의 객체 d생성, 포인터 pDer선언
+	pDer = &d; //파생 클래스 포인터 -> 파생클래스 객체
+
+	pDer->f(); //Derived의 멤버 f()호출
+	pDer->Base::f(); //Base의 멤버 f()호출
+
+	//업캐스팅을 통한 기본클래스의 포인터 -> 파생클래스 객체
+	Base *pBase = pDer; //업캐스팅
+	pBase->f();
+
+}
+```
 
 
 
