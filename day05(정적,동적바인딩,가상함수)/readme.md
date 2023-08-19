@@ -350,20 +350,289 @@ void main() {
 }
 ```
 
+# 추상화
+- 계층구조를 갖는 객체들을 클래스로 표현할 때 실제로 객체가 존재하지 않는 추상적인 개념에 대한 클래스가 필요한 경우가 있다.
+- 클래스 계층구조를 설계할 때 상위 계층의 클래스는 일반적인 데이터 멤버와 멤버함수를 포함하도록 하고, 하위 계층의 클래스는 상위 계층의 클래스가 가지고 있는 데이터 멤버와 멤버함수 외에 그 클래스에 필요한 고유한 데이터 멤버와 멤버함수를 포함하도록 한다.
 
+## 순수 가상함수
+- 동일한 개념의 동작을 정의한 멤버함수이지만 객체가 속한 클래스에 따라 고유한 동작을 할 수 있어야 하는 경우 가상함수를 이용할 수 있다.
+- 기초 클래스에서 이러한 가상함수를 만들 때 몸체가 없이 선언만 할 수도 있다. 이처럼 몸체가 없는 가상함수를 순수가상함수(pure virtual function)라고 한다.
+```c
+virtual 반환형 함수명(매개변수) = 0;
+```
+- 문장의 끝에 '= 0'이라고 작성한다. 이것은 0이라는 값과 관계가 있는 것은 아니고, 단지 이 함수가 순수가상함수라는 것을 나타내기 위한 문법적 표현에 불과하다.
+ 
+## 추상 클래스
+- 어떠한 클래스가 순수가상함수를 포함하고 있다면 그 클래스는 객체를 만들 수 없다.
+- 아직 정의되지 않은 멤버함수가 있기 때문이다. 이러한 클래스를 추상 클래스(abstract class)라고 한다.
+- 만일 파생 클래스에서 재정의하지 않은 기초 클래스의 순수가상함수가 있다면, 또는 그 파생 클래스에서 새로운 순수가상함수를 선언하여 아직 구체적으로 정의하지 않은 멤버함수가 존재한다면 그 파생 클래스 역시 추상 클래스이다.
 
+## 상세 클래스
+- 모든 순수가상함수가 재정의되어 더 이상 순수가상함수가 포함되지 않은 파생 클래스는 이제 실체가 있는(concrete) 대상을 표현하는 클래스로서, 이를 상세 클래스(concrete class)라고 한다.
 
+## virtual.cpp
+```c
+#include <iostream>
+using namespace std;
 
+class AClass { //추상클래스
+public:
+	virtual void vf() const = 0; //순수가상함수
+	void f1() const {
+		cout << "Abstract" << endl;
+	}
+};
 
+class CClass : public AClass { //상세 클래스
+public:
+	void vf() const {
+		cout << "순수가상함수 구현" << endl;
+	}
+	void f2() const {
+		cout << "Concrete" << endl;
+	}
+};
 
+void main() {
+	//AClass objA; 추상클래스는 객체를 만들 수 없다
+	CClass objC;// 상세 클래스인 CClass의 객체를 만듦
 
+	objC.vf();	// 재정의한 함수 vf() 호출
 
+	objC.f1();	// 기초 클래스인 AClass의 멤버함수 호출
 
+	objC.f2();	// CClass의 멤버함수 호출
+}
+```
+## 추상클래스의 활용
+- 클래스 계층구조를 설계할 때 기초 클래스에서 구체적으로 구현할 수는 없다.
+- 파생 클래스에서 반드시 구현하여 객체가 그 기능을 반드시 가지고 있게 만들 필요가 있다면
+- 기초 클래스에서 이를 순수가상함수로 선언하여 추상 클래스로 만들면 된다.
 
+## 도형 그리기
+- 원, 삼각형 등은 모두 도형이다.
+- 도형은 원이나 삼각형과 같은 구체적인 도형들을 통칭하는 것이므로 단지 도형이라고 하면 실체가 없는 추상적인 개념이다.
+- 도형은 그 모양이 있으므로 원이나 삼각형 등의 구체적인 도형은 그 모양을 그리는 방법을 정할 수 있다.
+- 추상적인 개념인 도형은 실제로 그리는 방법을 정할 수는 없지만 도형에 속하는 원이나 삼각형이 각각 자신을 그리는 방법을 정의해야 한다는 것을 정해 놓을 수는 있다.
+    - 기초클래스 : '도형'
+    - 파생클래스 : '원,'삼각형'
+- '도형' 클래스는 '그린다'라는 행위가 필요하지만 아직 그 방법을 정의할 수는 없으므로 이를 순수가상함수로 선언하며, '도형' 클래스는 추상 클래스가 된다.
+- 파생 클래스인 '원'이나 '삼각형'은 기초 클래스의 순수가상함수로 선언된 '그린다'라는 행위를 실재로 구현하는 '그린다'라는 함수를 재정의해야 하기 때문에 상세 클래스가 된다.
+- 그렇지 않으면 그 클래스에 여전히 구현되지 않은 순수가상함수가 있으므로 추상 클래스가 되어 그 클래스의 객체를 만들 수 없다.
 
+## 예제
+- 2차원 도형에 해당되는 원을 나타내는 클래스와 삼각형을 나타내는 클래스를 선언하고자 한다.
+- 이 클래스들은 모두 공통적으로 도형이므로 도형을 그리기 위한 선의 색과 도형 내부를 채워 칠하기 위한 색을 속성으로 가지고 있어야 한다.
+- 이러한 속성을 이용하여 그리는 방법을 설명할 수 있어야 한다. 또한 그래픽 객체를 (dx, dy)만큼 이동할 수 있으며, 2차원 좌표 원점을 기준으로 확대/축소하는 크기 조정을 할 수 있다.
+- 프로그램은 현재 속성이라는 객체가 있다.
+- 속성 객체는 선의 색과 내부 영역을 칠하기 위한 색을 표현하며, 그 값을 설정하거나 읽어낼 수 있다.
+- 도형 객체를 만들면 현재 속성에 따라 만들어진다. 또한 도형 객체의 선 색 및 채우기 색을 변경할 수 있다.
 
+## GrAttrib 클래스
+### GrAttrib클래스의 메서드
+|메서드|비고|
+|-----|-----|
+|GrAttrib()|생성자. 선 색은 검정, 내부 영역은 흰색이 디폴트이다.|
+|void setLineColor(const string&)|지정된 색으로 선 색 지정|
+|void setFillColor(const string&)|지정된 색으로 내부 영역 색 지정|
+|string getLineColor()|선 색 반환|
+|string getFillColor()|내부 영역 색 반환|
 
+### GrAttrib클래스의 속성
+|속성|비고|
+|-----|-----|
+|string lineColor|선 색 속성|
+|string fillColor|내부 영역 색 속성|
 
+### GrAttrib.h
+```c
+#ifndef GRATTRIB_H_INCLUDED
+#define GRATTRIB_H_INCLUDED
+#include <string>
+using namespace std;
 
+class GrAttrib {	//그래픽 속성
+	string lineColor; //선 색 속성
+	string fillColor; //내부 영역 색 속성
+public:
+	GrAttrib() : lineColor("검정색"), fillColor("흰색") {};
+	GrAttrib(const string&lc, const string &fc) :lineColor(lc), fillColor(fc) {};
 
+	//속성 지정 멤버함수
+	void setLineColor(const string &lc) {
+		lineColor = lc;
+	}
+
+	void setFillColor(const string &fc) {
+		fillColor = fc;
+	}
+
+	//속성 값을 읽는 멤버함수
+	string getLineColor() const{
+		return lineColor;
+	}
+
+	string getFillColor() const {
+		return fillColor;
+	}
+};
+
+extern GrAttrib curAttrib; //현재 속성을 나타내는 전역 객체
+
+#endif // !GRATTRIB_H_INCLUDED
+```
+
+## Figure 클래스
+- 원과 삼각형은 모두 2차원 도형에 속하는 도형 유형이다.
+- 공통적으로 각각의 도형마다 그리기 위한 속성(선 색, 내부 영역 색)이 있고 이러한 속성 값을 지정할 수 있다.
+- 도형을 이동하고 크기 조정을 하고 그릴 수 있다.
+- 원과 삼각형을 일반화한 '도형'을 나타내는 Figure라는 기초 클래스를 선언한다.
+- 이때 도형의 이동, 크기 조정, 그리기 등은 그 도형이 구체적으로 어떠한 도형인지가 결정되어야 구현할 수 있다.
+- 도형이라면 그러한 메소드가 반드시 필요하기 때문에 도형의 파생 클래스로 선언할 원과 삼각형 클래스에서는 이러한 메소드를 반드시 구현하게 하려고 한다.
+- 이 메소드들을 Figure 클래스의 순수가상함수로 선언한다.
+
+### Figure클래스의 메서드
+|메서드|비고|
+|-----|-----|
+|Figure()|생성자. 현재 속성에 따라 도형을 생성|
+|void setLineColor(const string&)|지정된 색으로 선 색 지정|
+|void setFillColor(const string&)|지정된 색으로 내부 영역 색 지정|
+|void move( double dx, double dy)| 도형을 (dx,dy)만큼 이동|
+|void scale(double s) | 도형을 원점 기준으로 s배 크기 조정|
+|void draw()|도형을 그림|
+
+### Figure클래스의 속성
+|속성|비고|
+|-----|-----|
+|GrAttrib attrib|도형의 그래픽 속성|
+
+### Figure.h
+```c
+#ifndef FIGURE_H_INCLUDED
+#define FIGURE_H_INCLUDED
+#include <iostream>
+#include "GrAttrib.h"
+
+class Figure {
+protected:
+	GrAttrib attrib; //그래픽 속성
+public:
+	//현재 그래픽 속성에 따라 도형객체 생성
+	Figure() : attrib(curAttrib) {};
+
+	//선 색 속성 지정
+	void setLineColor(const string &c) {
+		attrib.setLineColor(c);
+	}
+
+	//내부 영역의 색 지정
+	void setFillColor(const string &c) {
+		attrib.setFillColor(c);
+	}
+
+	//도형의 이동, 원점 기준 크기 조정, 그리기 멤버함수
+	virtual void move(double dx, double dy) = 0;
+	virtual void scale(double s) = 0;
+	virtual void draw() const = 0;
+};
+#endif // !FIGURE_H_INCLUDED
+```
+
+## Circle클래스
+- 원을 나타내는 Circle 클래스는 Figure로부터 상속받는 속성 외에 원의 중심 좌표와 반경을 나타내는 속성이 필요하다.
+- Figure 클래스에서 순수가상함수로 선언하여 놓은 move(), scale(), draw()를 각각 재정의하여 구현한다.
+### Circle클래스의 메서드
+|메서드|비고|
+|-----|-----|
+|Circle(double x, double y, double r)|생성자|
+|void move(double dx, double dy) | 원을(dx,dy)만큼 이동|
+|void scale(double s) | 원을 원점 기준으로 s배 크기 조정|
+|void draw()|원을 그림|
+
+### Circle클래스의 속성
+|속성|비고|
+|-----|-----|
+|double cx, cy|원의 중심좌표|
+|double radius|원의 반경|
+
+### Circle.h
+```c
+#ifndef CIRCLE_H_INCLUDED
+#define CIRCLE_H_INCLUDED
+#include <iostream>
+#include "Figure.h"
+using namespace std;
+
+class Circle : public Figure {
+	double cx, cy; //원의 중심 좌표
+	double radius; //원의 반경
+public:
+	//현재 그래픽 속성에 따라 원 객체 생성
+	//(x,y):중심 좌표
+	//r:반경
+	Circle(double x, double y, double r) :cx(x), cy(y), radius(r) {};
+
+	//원의 이동, 원점 기준 크기 조정, 그리기 멤버 함수
+	void move(double dx, double dy);
+	void scale(double s);
+	void draw() const;
+};
+#endif // !CIRCLE_H_INCLUDED
+```
+### Circle.cpp
+```c
+#include <iostream>
+#include <string>
+#include "Circle.h"
+using namespace std;
+
+//원의 중심 좌표를 (dx,dy)만큼 이동
+void Circle::move(double dx, double dy) {
+	cx += dx;
+	cy += dy;
+}
+
+//좌표 원점을 기준으로 s배 크기 조정
+void Circle::scale(double s) {
+	cx *= s;
+	cy *= s;
+	radius *= s;
+}
+
+//원을 그리는 방법 출력
+void Circle::draw() const {
+	cout << "원 그리기" << endl;
+	cout << "(" << cx << ", " << cy << ")에서부터 ";
+	cout << radius << "만큼 떨어진 모든 점들을 ";
+	cout << attrib.getLineColor() << "으로 그리고" << endl;
+	cout << "내부를 " << attrib.getFillColor();
+	cout << "으로 채운다" << endl;
+}
+```
+## Triangle 클래스
+- Triangle 클래스는 Figure로부터 상속받는 속성 외에 삼각형의 세 꼭짓점 좌표를 나타내는 속성이 필요하다.
+- Figure 클래스에서 순수가상함수로 선언하여 놓은 move(), scale(), draw()를 각각 재정의하여 구현한다.
+
+### Triangle클래스의 메서드
+|메서드|비고|
+|-----|-----|
+|Triangle(double v[3][2])|생성자|
+|void move(double dx, double dy) | 삼각형을을(dx,dy)만큼 이동|
+|void scale(double s) | 삼각형을 원점 기준으로 s배 크기 조정|
+|void draw()|삼각형을 그림|
+
+### Triangle클래스의 속성
+|속성|비고|
+|-----|-----|
+|double x1,y1|삼각형의 꼭짓점 좌표|
+|double x2,y2|
+|double x3,y3|
+### Triangle.h
+```c
+
+```
+### Triangle.cpp
+```c
+
+```
 
