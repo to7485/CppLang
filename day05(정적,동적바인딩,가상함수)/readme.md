@@ -625,14 +625,102 @@ void Circle::draw() const {
 |속성|비고|
 |-----|-----|
 |double x1,y1|삼각형의 꼭짓점 좌표|
-|double x2,y2|
-|double x3,y3|
+|double x2,y2|삼각형의 꼭짓점 좌표|
+|double x3,y3|삼각형의 꼭짓점 좌표|
 ### Triangle.h
 ```c
+#ifndef TRIANGLE_H_INCLUDED
+#define TRIANGLE_H_INCLUDED
+#include <iostream>
+#include "Figure.h"
+using namespace std;
 
+class Triangle :public Figure {
+	//삼각형의 세 꼭짓점 좌표(x1,y1),(x2,y2),(x3,y3)
+	double x1, y1, x2, y2, x3, y3;
+public:
+	//현재의 그래픽 속성에 따라 삼각형 객체 생성
+	//v : 세 개의 꼭짓점 좌표 배열
+	Triangle(const double v[3][2]);
+
+	//삼각형의 이동, 원점 기준 크기 조정, 그리기 멤버함수
+	void move(double dx, double dy);
+	void scale(double s);
+	void draw() const;
+};
+#endif // !TRIANGLE_H_INCLUDED
 ```
 ### Triangle.cpp
 ```c
+#include <iostream>
+#include <string>
+#include "Triangle.h"
+using namespace std;
 
+//생성자 : 세 꼭짓점 좌표를 초기화
+Triangle::Triangle(const double v[3][2]) {
+	x1 = v[0][0]; y1 = v[0][1];
+	x2 = v[1][0]; y2 = v[1][2];
+	x3 = v[2][0]; y3 = v[2][1];
+}
+
+void Triangle::move(double dx, double dy) {
+	x1 += dx; y1 += dy;
+	x2 += dx; y2 += dy;
+	x3 += dx; y3 += dy;
+}
+
+//세 꼭짓점 좌표를 s배만큼 조정
+void Triangle::scale(double s) {
+	x1 *= s; y1 *= s;
+	x2 *= s; y2 *= s;
+	x3 *= s; y3 *= s;
+}
+
+//삼각형을 그리는 방법
+void Triangle::draw() const {
+	cout << "삼각형 그리기" << endl;
+	cout << "(" << x1 << ", " << y1 << "), ";
+	cout << "(" << x2 << ", " << y3 << "), ";
+	cout << "(" << x3 << ", " << y3 << ")의 좌표를 잇는 선분을";
+	cout << attrib.getLineColor() << "으로 그리고" << endl;
+	cout << "내부를 " << attrib.getFillColor();
+	cout << "으로 채운다." << endl;
+}
+```
+
+## FigMain.cpp
+```c
+#include <iostream>
+#include <string>
+#include "GrAttrib.h"
+#include "Figure.h"
+#include "Circle.h"
+#include "Triangle.h"
+using namespace std;
+
+//현재의 그래픽 옵션
+GrAttrib curAttrib("검정", "흰색");
+
+void drawFigs(const Figure * const figs[], int n) {
+	for (int i = 0; i < n; i++) {
+		figs[i]->draw();
+		cout << endl;
+	}
+}
+
+void main() {
+	Figure *figs[2];
+	figs[0] = new Circle(0, 20, 10);
+	double v[3][2] = { {0,0},{20,0},{10,15} };
+	curAttrib.setLineColor("빨강");
+	curAttrib.setFillColor("노랑");
+	figs[1] = new Triangle(v);
+	drawFigs(figs, 2); //모든 도형 그리기 방법 출력
+
+	figs[0]->scale(2); //원의 크기 조정
+	figs[1]->move(5, 10); //삼각형의 이동
+	drawFigs(figs, 2); //모든 도형 그리기 방법 출력
+}
 ```
 
