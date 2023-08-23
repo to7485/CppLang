@@ -155,6 +155,49 @@ int main()
 - 함수 내부를 살펴보시면, 전달받은 b의 값이 0일 경우에 예외를 던지고 있습니다.
 - 그런데, func 함수 내에는 예외를 처리하는 영역이 없기 때문에, func 함수가 호출된 영역으로 예외를 전달합니다.
 
+## 다중 예외처리
+```c
+#include <iostream>
+#include <string>
+#include <cctype>
+//데이터의 타입을 판단하는 함수를 제공
+//isalpha : 알파벳이면 1
+//isdigit : 숫자면 1
+using namespace std;
+
+void main() {
+	string id;
+	int score,subjects;
+	try {
+		cout << "id를 입력하세요(첫 글자는 영문자여야 합니다.) : ";
+		cin >> id;
+		if (!isalpha(id[0])) throw id;
+		cout << "총점을 입력하세요(0점 이상) : ";
+		cin >> score;
+		if (score < 0) throw score;
+		cout << "과목수를 입력하세요(1개 이상) : ";
+		cin >> subjects;
+		if (subjects <= 0) throw '!';
+
+		cout << id << ": 평균 " << score / (double)subjects << "점" << endl;
+	}
+	catch (string e) {
+		cout << "잘못된 Id입력입니다!(" << e << ")" << endl;
+	}
+	catch (int e) {
+		cout << "잘못된 점수 입력입니다! (" << e << ")" << endl;
+	}
+	//catch()에 ...을 써주게 되면 어떤 throw가 발생하든지
+	//다 받을 수 있다.
+	//어떤 예외가 올지 예측할 수 없어서 구체적으로 안내하기가
+	//힘들다. 그리고 값을 넘겨받을 수 없다.
+	catch (...) {
+		cout << "잘못된 입력입니다." << endl;
+	}
+	cout << "프로그램을 종료합니다" << endl;
+}
+```
+
 ## 예외처리 클래스
 - 예외의 처리는 발생한 예외에 맞게 선별적으로 이루어져야 한다.
 - 예외 객체의 자료형(클래스)이므로 문자열이나 정수 등 일반적인 자료형의 예외 객체를 사용하는 것보다는 예외의 요인별로 정의된 예외 클래스의 객체를 사용하는 것이 좋다.
