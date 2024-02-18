@@ -98,18 +98,35 @@ void main() {
 }
 ```
 
-### FirstStep.cpp
 ```c
+// C라이브러리를 include 할때는
+// 헤더파일명 앞에 c를 붙이고 .h확장자는 생략
+#include <cstdio>//#include <stdio.h>
+#include <iostream> //입출력에 관련된 C++라이브러리
+void main() {
+
+	printf("hello c world!!\n");
+	std::cout << "hello C++ world!!!\n";
+}
+```
+
+### FirstStep.cpp
+```c++
 #include <iostream>
 //iostream : C++의 스트림 출력을 위한 사항들을 선언하는 내용을 담고 있는 헤더파일
 
-//std::cout<<value;
-// << : 삽입연산자
+
 
 void main() {
-	//표준 출력 스트림으로 문장을 출력함
+	
+	표준 출력 스트림으로 문장을 출력함
 	std::cout << "나의 첫번째 C++프로그램" << std::endl;
+	//cout -> 표준 출력 스트림
 	//cout은 콘솔에 출력하는 기능을 제공
+
+	//std::cout<<value;
+	//std:: -> namespace
+	// << -> 스트림연산자
 
 	//endl은 행의 끝(end of line)을 알리는 문자를 출력함으로써
 	//다음에 출력하는 내용은 아래 행에 출력되게 한다.
@@ -121,11 +138,92 @@ void main() {
 }
 ```
 
+### information.cpp
+```c
+//실행 예
+//제임스
+//35세
+//인천시 부평구
+//취미는 축구
+//좋아하는 음식은 피자
+
+#include <iostream> //입출력에 관련된 C++라이브러리
+void main() {
+
+	std::cout << "홍길동"<< endl;
+	std::cout << 35 << "세" <<endl;
+	std::cout << "인천시 부평구" <<endl;
+	std::cout << "취미는 축구" <<endl;
+	std::cout << "좋아하는 음식은 피자" <<endl;
+
+}
+
+//namespace를 매번 써줘야 하는게 귀찮다.
+using namespace std; //추가시 std namespace만 생략 가늗
+#include <iostream> //입출력에 관련된 C++라이브러리
+void main() {
+
+	cout << "홍길동"<< "\n";
+	cout << 35 << "세" <<"\n";
+	cout << "인천시 부평구" << "\n";
+	cout << "취미는 축구" << "\n";
+	cout << "좋아하는 음식은 피자" << "\n";
+
+}
+```
+
 ## 네임스페이스
 - C++에서 하나의 명칭은 한 번만 정의되어야 한다.
 - 그런데 여러 개발자가 작성한 프로그램들을 묶어 하나의 프로그램을 만들 경우 같은 이름을 중복하여 정의할 우려가 있다.
 - 변수,함수,구조체,클래스 등의 동일한 이름의 충돌 문제를 C++에서 해결하기 위해 사용되는 영역이다.
 
+### a.h
+```c
+#include <stdio.h>
+
+void print();
+```
+
+### b.h
+```c
+#include <stdio.h>
+
+void print();
+```
+
+### a.c
+```c
+#include "a.h"
+
+void print() {
+	printf("a.h의 print\n");
+}
+```
+
+### b.c
+```c
+#include "b.h"
+
+void print() {
+	printf("a.h의 print\n");
+}
+```
+
+### test.cpp
+```c
+#include "a.h"
+#include "b.h"
+
+//namespace
+//include한 두개이상의 헤더파일에 동일한 이름의 함수가 있을때
+//둘을 구분하기 위한 도구 장치
+
+void main() {
+
+	print();
+
+}
+```
 ### NameSpace.cpp
 ```c
 #include <iostream>
@@ -198,6 +296,41 @@ cout << NameSpace1::b << endl;
 
 ## 문자형
 - char  1byte
+
+## 논리형
+- bool
+
+## 문자열
+- string 클래스
+
+### 자료형.cpp
+```c
+#include<iostream>
+
+//c++의 string클래스
+#include<string>
+//c에서은 string 헤더파일
+#include <cstring>//#include <string.h>
+
+using namespace std;
+
+void main() {
+	char a;
+	short b;
+	int c;
+	long d;
+	float e;
+	double f;
+
+	//c언어에서는 참은 1 거짓은 0이었다.
+	//c++에서는  bool이라는 새로운 키워드가 생겼다.
+	bool g = true; //참 -> true, 거짓 -> false
+
+	//string 클래스를 사용하려면 라이브러리를 import해줘야 한다.
+	//문자열을 저장하는 string클래스 타입
+	string s = "apple";
+}
+```
 
 # 변수
 - 프로그램이 실행되는 동안 기억하고 있어야 하는 값들을 저장하는 메모리 영역이다.
