@@ -32,6 +32,20 @@
 
 ![image](img/vs4.png)
 
+# 프로젝트 생성하기
+
+![image](img/vs5.png)
+
+![image](img/vs6.png)
+
+![image](img/vs7.png)
+
+# 소스 파일의 작성
+
+![image](img/vs8.png)
+
+- 소스파일의 이름을 작성하고 ok를 누른다.
+
 # C++ 프로그램의 작성 및 빌드
 
 ## 소스 프로그램의 작성
