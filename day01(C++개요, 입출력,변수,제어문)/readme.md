@@ -86,6 +86,18 @@
 ### #if,#ifdef,#ifndef
 - 조건부 컴파일
 
+
+### C언어 기반이기 때문에 C의 문법이 가능하다.
+### hello.cpp
+```c
+#include <stdio.h>
+
+void main() {
+
+	printf("hello c world!!\n");
+}
+```
+
 ### FirstStep.cpp
 ```c
 #include <iostream>
