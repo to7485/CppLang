@@ -364,6 +364,8 @@ double mean, stddev;	// double형 변수 선언
 - 형식3은 value의 값을 축소 형 변환(정보의 손실이 발생할 수 있는 변환, 즉, 오차나 잘못된 변환이 일어날 가능성이 있는 변환)을 해야 할 경우 오류로 취급한다.
 - C에 비해 자료형을 보다 엄격히 취급하는 C++의 특성이 반영된 것이다.
 
+### 변수.cpp
+
 ```c
 int a = 10;
 
@@ -385,6 +387,96 @@ int e{1.5};	// 오류 － 축소 변환이 필요함(C++11)(Demotion)
 auto i{ 10 };
 ```
 - 변수 i의 자료형을 지정하지 않았지만 초기화에 사용된 값인 10이 int형이므로 변수 i의 자료형이 int형이라고 추론한다.
+
+# 표준입력
+- 표준입력장치를 통해 값을 읽어와 화면에 출력을 하는것
+
+### 표준입력1.cpp
+```c
+#include <iostream>
+#include <string>
+using namespace std;
+
+void main() {
+
+	int a;
+
+	//cin -> 표준입력 스트림
+	//>> -> 추출연산자
+	cin >> a;
+
+	cout << a << endl;
+
+	string s;
+	cin >> s;
+	cout << s << endl;
+}
+```
+
+### 표준입력연습2.cpp
+
+```c
+실행예
+이름 >> james(엔터)
+나이>> 21(엔터)
+신장>> 175.8(엔터)
+혈액형>> AB(엔터)
+
+james 21세 AB형 175.8cm
+
+#include <iostream>
+#include <string>
+using namespace std;
+
+void main() {
+
+	int age;
+	string name, bloodType;
+	double height;
+
+	cout << "이름>>";
+	cin >> name;
+
+	cout << "나이>>";
+	cin >> age;
+
+	cout << "신장>>";
+	cin >> height;
+
+	cout << "혈액형>>";
+	cin >> bloodType;
+
+	cout << name << " " << age << "세 " << bloodType << "형 " << height << "cm";
+	
+}
+
+```
+
+### 표준입력연습2.cpp
+```c
+#include <iostream>
+#include<string>
+using namespace std;
+void main() {
+
+	int time ,hour, minute, second;
+
+	cout << "초>>"; cin >> time;
+	second = time % 60;
+	time = time / 60;
+
+	minute = time % 60;
+	time = time / 60;
+
+	hour = time;
+
+	//to_string(정수 또는 실수) : 숫자 -> 문자열, 123 -> "123"
+	//string타입의 문자열을 + 연산자로 결합 가능함 ex) "a" +"bc" -> "abc"
+	string s = to_string(hour)+"시간 "+ to_string(minute)+"분 "+to_string(second)+"초";
+
+	cout << s << endl;
+}
+```
 
 # 상수
 - 변수의 값이 항상 고정된 값을 갖게 하려면 변수를 선언할 때 const라는 키워드를 사용한다.
