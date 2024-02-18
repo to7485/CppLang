@@ -225,10 +225,11 @@ void main() {
 }
 ```
 ### NameSpace.cpp
-```c
+```c++
 #include <iostream>
 
 //'{' 와 '}'로 묶인 영역 내에 정의된 이름은 지정된 명칭공간에 속하게 된다.
+
 namespace NameSpace1 { int a = 10; }
 namespace NameSpace2 { int a = 20; }
 int a = 30;
@@ -240,17 +241,22 @@ void main() {
 
   //명칭공간 내에 정의된 이름을 그 영역의 밖에서 사용할 때는 영역식별 연산자(::)로 소속된 명칭공간을 지정해야 한다.
   //NameSpace1에 속한 a를 사용하려면 10행에서와 같이 NameSpace1::a라고 표기해야 한다.
+
 	std::cout << NameSpace1::a << std::endl;
   //NameSpace2라는 명칭공간을 지정하였으므로 4행에 정의된 a의 값 20을 출력한다.
+
 	std::cout << NameSpace2::a << std::endl;
   //::a와 같이 영역식별 연산자 앞에 명칭공간 이름이 없으면 전역 명칭공간에 정의된 a를 나타내는 것으로, 5행에 정의된 a가 이에 해당된다.
+
 	std::cout << ::a << std::endl;
   //지역변수 a 출력
+
 	std::cout << a << std::endl;
 	std::cout << NameSpace1::b << std::endl;
 
 //C++에 제공되는 표준 라이브러리의 이름들은 모두 std('standard'를 줄인 이름)라는 명칭공간에 포함된다.
 //그러므로 NameSpace.cpp의 10~14행에서 사용한 cout과 endl이라는 이름에는 'std::'라고 명칭공간을 지정하였다.
+
 }
 
 ```
