@@ -160,6 +160,12 @@ void main() {
 
 //namespace를 매번 써줘야 하는게 귀찮다.
 using namespace std; //추가시 std namespace만 생략 가늗
+
+//using
+//namespace를 사용하겠다.
+//namespace std에 포함된 모든것을 사용하겠다
+//라는 의미
+
 #include <iostream> //입출력에 관련된 C++라이브러리
 void main() {
 
