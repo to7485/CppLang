@@ -104,10 +104,34 @@ void main() {
 - 동적으로 할당된 메모리는 포인터를 통해 접근한다: 포인터를 역참조하는 것은 변수에 직접 접근하는 것보다 느리다.
 - 힙은 큰 메모리 풀이므로 큰 배열, 구조체 또는 클래스를 할당할 수 있다.
 
+## 메모리의 정적할당(static memory allocation)
+- 크기가 결정되는 시점 -> compile시
+- 크기가 결정되어 있음
+- 프로세스 메모리 영역중에 데이터영역, 스택영역에 할당
 ## 메모리의 동적할당
-- 필요할 때 기억공간을 할당하고 더 이상 그 공간이 필요하지 않으면 반환할 수 있게 하는 것.
+- 크기가 결정되는 시점 -> runtime 시
+- 프로세스 메모리 영역중에 힙영역에 할당된다.
+- 필요할 때 메모리를 할당하고 더 이상 그 공간이 필요하지 않으면 반환할 수 있게 하는 것.
 - 그런데 동적 메모리 할당으로 생성된 저장공간은 이름이 없어 변수처럼 그 이름을 통해 액세스할 수 없다.
 - 동적으로 할당된 저장공간을 포인터 변수가 가리키게 하면 그 포인터를 이용하여 액세스할 수 있다.
+
+### 동적할당1.c
+```c
+#include <stdlib.h>
+
+using namespace std;
+
+int main(){
+
+    //C버전의 동적할당
+    int* arr1 = (int*)malloc(sizeof(int)*5);
+
+    //C버전의 동적할당 해제
+    free(arr1);
+
+    return 0;
+}
+```
 
 ## new와 delete
 
@@ -131,6 +155,7 @@ void main() {
 2. delete [] 포인터변수;
 ```
 
+### 동적할당2.cpp
 ```c
 #include <iostream>
 
@@ -140,15 +165,216 @@ void main() {
 	int* a = new int;
 	int* b = new int(2); //동적할당을 받으면서 값을 초기화 할 수 있다.
 
+	//C++에서는 new 키워드로 동적할당을 한다.
+	int *arr3 = new int[5];
+
 	*a = 1;
+
+	int* arr3 = new int[5];
+
+	//new로 동적할당한 메모리는 쓰레기 값이 저장된다.
+	//초기화를 해줄 코드가 필요하다.
+    for(int i = 0 ; i< 5; i++){
+        arr3[i] = 0;
+    }
+	
+     for(int i = 0; i < 5; i++){
+       cout << arr3[i]<<" " << endl;
+    }
 
 	cout << *a << endl;
 	cout << *b << endl;
 
+
+	//변수타입 할당 해제
 	delete a;
 	delete b;
+
+	//배열타입 할당 해제
+	delete[] arr3;
 }
 ```
+
+### 동적할당연습1.cpp(10분)
+```c
+#include <iostream>
+
+using namespace std;
+
+int main(){
+    //동적 메모리 할당을 이용하여 학생들의
+    //점수를 처리하는 프로그램을 작성하시오
+    //성적을 입력할 학생 수 만큼 메모리를 할당하여 성적을 입력받는다.
+    //입력받은 점수의 총합과 평균 그리고 최대값을 구한다.
+    
+    int n;
+    int sum = 0;
+    double avg;
+   
+
+    cout << "성적을 입력할 학생 수 : ";
+    cin >> n;
+
+    int* student = new int[n];
+
+    cout << n<<" 명의 학생 점수를 입력하시오..."<<endl;
+    for(int i = 0; i < n; i++){
+        
+        cin >> student[i];
+    }
+
+     int max = student[0];
+    
+    for(int i = 0; i < n; i++){
+        
+        sum += student[i];
+        if(max < student[i]){
+            max = student[i];
+        }
+    }
+
+    avg = (double)sum / n;
+
+    cout << "학 생  수 : " << n << endl;
+    cout << "총     합 : " << sum << endl;
+    cout << "평     균 : " << avg << endl;
+    cout << "최 대  값 : " << max << endl;
+
+    return 0;
+}
+```
+
+### 동적할당연습2.cpp(10분)
+```c
+#include <iostream>
+#include <string>
+
+using namespace std;
+
+int main(){
+    //string 동적 배열을 이용한 문자열 처리
+    //string 동적 배열을 이용하여 학생의 이름을 처리하는
+    //프로그램을 작성하시오
+
+    //입력할 학생 수 만큼 메모리를 할당하여 성적을 입력받는다.
+    //단, 한 명당 10개의 문자를 저장할 수 있는 배열을 이용한다.
+
+    //실행 예
+    //입력할 문자열 개수 : 3
+    //1 번째 이름 : 서두옥
+    //2 번째 이름 : 홍길동
+    //3 번째 이름 : 제임스
+
+    //### 문자열 출력 ###
+    //서두옥
+    //홍길동
+    //제임스
+
+    int count = 0;
+    cout << "입력할 문자열 개수 : ";
+    cin >> count;
+
+    string* student = new string[count];
+
+    for(int i = 0; i < count; i++){
+        cout << i+1 << " 번째 이름 : ";
+        cin >> student[i];
+    }
+
+    cout << "\n### 문자열출력 ###\n" <<endl;
+    for(int i = 0; i <count; i++){
+        cout << student[i] << endl;
+    }
+    return 0;
+}
+```
+
+## 동적 재할당
+- c언어에서는 realloc()메서드를 통해 동적할당된 메모리의 크기를 늘리거나, 줄이는것이 가능하다.
+- 하지만 c++에서는 메모리를 재할당 하는것이 불가능하다.
+
+### 메모리재할당.cpp
+```c
+#include <iostream>
+#include <stdlib.h>
+
+
+using namespace std;
+
+int main(){
+
+    char* p = (char*)malloc(10);
+
+    
+    p = (char*)realloc(p,20);//동적할당메모리 재할당
+    p = (char*)realloc(p,5);
+
+    char* a = new char[5];
+    //C++에서는 동적할당한 메모리를 
+    //재할당 할 수 없다.
+
+    //delete[] a; //동적할당을 해제 한 후
+    //a = new char[10];//다시할당해야 한다.
+
+    char* b = new char[10];
+    for(int i = 0; i < 5; i++){
+        b[i] = a[i];
+    }
+
+    delete [] a;
+
+    return 0;
+}
+```
+# 레퍼런스(참조자)
+- c++에서는 특정 변수의 실제 이름 대신 사용할 수 있는 참조자(reference)라는 새로운 기능이 추가되었습니다.
+- 참조자는 크기가 큰 구조체와 같은 데이터를 함수의 인수로 전달해야 할 경우에 사용할 수 있습니다.
+- 또한, c++의 클래스(class)를 설계할 때에도 자주 사용됩니다.
+
+## 참조자의 선언
+```c
+int 변수명; //변수의 선언
+int& 참조자명 = 변수명; //참조자 선언
+```
+- 앰퍼샌드(&)는 주소 연산자가 아닌 타입을 식별하기 위해 사용하는 식별자로 사용된 것이다.
+- 이렇게 선언된 참조자는 대상 변수와 같은 메모리 위치를 참조하게 된다.
+
+## 참조자 선언시 주의사항
+1. 참조자의 타입은 대상이 되는 변수의 타입과 일치해야 한다.
+2. 참조자는 선언과 동시에 초기화되어야 한다.
+3. 참조자는 한 번 초기화되면, 참조하는 대상을 변경할 수 없다.
+
+### 레퍼런스1.cpp
+```c
+#include <iostream>
+using namespace std;
+
+int main(){
+
+    int a = 10;
+
+    //포인터변수
+    int* p = &a; //일반변수의 주소를 p에 저장
+    *p = 20;//포인터 연산자로 일반변수에 접근
+
+    cout << a <<endl;
+
+    //레퍼런스(참조자) 변수
+    int& ref = a; // 변수 a의 별칭(alias)을 부여
+    int r = a;
+    cout << ref << endl;
+    ref = 30; //레퍼런스가 변경되면 a도 변경된다.
+    r = 40; //r값이 바뀌어도 a의 값은 변하지 않는다.
+
+    cout << a << endl;
+
+    return 0;
+}
+```
+
+
+
+
 
 # 클래스
 - 구조체(struct)는 프로그램으로 표현하고자 하는 대상에 대한 데이터의 구조만을 정의하고 있다.

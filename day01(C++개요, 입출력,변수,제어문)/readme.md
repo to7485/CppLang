@@ -845,6 +845,73 @@ switch (정수형_수식) {
 for (초기화 ; 반복조건 ; 증감)
     문장;
 ```
+
+### 반복문연습문제1.cpp
+```c
+배열에 정수 5개를 입력받아서
+모두 출력하고 최대값과 최소값을 출력
+(실행 예)
+정수입력 >> 2 5 3 7 1
+
+#include <iostream>
+#include<string>
+using namespace std;
+
+int main(){
+    int arr[5] = {0};
+
+    cout << "정수입력>> ";
+    for(int i = 0; i < 5; i++){
+        cin >> arr[i];
+    }
+
+    int max,min;
+
+    max = min = arr[0];
+
+    for(int i = 1; i < 5; i++){
+        if(max < arr[i]) max = arr[i];
+        if(min > arr[i]) min = arr[i];
+    }
+
+    string s = "[ ";
+    for(int i = 0; i < 5; i++){
+       s = s + to_string(arr[i]) + " ";
+    }
+    s = s +"]";
+    cout << s << endl;
+    cout <<"max="<<max<<", min="<<min<<endl;
+
+    return 0;
+}
+```
+
+### 위 코드에서 오름차순으로 정렬하기
+```c
+#include <iostream>
+#include <string>
+#include <algorithm>
+using namespace std;
+
+int main(){
+    int arr[5] = {0};
+
+    cout << "정수입력>> ";
+    for(int i = 0; i < 5; i++){
+        cin >> arr[i];
+    }
+
+    //sort(배열의 시작주소, 배열의 마지막 주소)
+    sort(arr,arr+5);
+
+    for(int i = 0; i <5; i++){
+        cout <<arr[i] <<" ";
+    }
+
+    return 0;
+}
+```
+
 ### 범위기반 for문
 - 배열과 같이 여러 원소로 구성된 데이터 집합에 대해 첫 원소부터 마지막 원소까지 반복하여 실행하도록 지시하는 것
 ```c
