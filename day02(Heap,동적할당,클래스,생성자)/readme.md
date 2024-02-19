@@ -372,6 +372,35 @@ int main(){
 }
 ```
 
+### 레퍼런스2.cpp
+```c
+#include <iostream>
+#define FIVE 5 //상수에 별칭 붙히는것
+
+typedef int element; //타입에 별칭 붙히는것
+
+using namespace std;
+
+int main(){
+
+    int a;
+    int b;
+
+
+    //int& ref; 레퍼런스 변수는 초기화 하지 않으면 오류발생
+    //int& ref = 10; 값을 직접 넣는것도 안된다.
+    int& ref = a;//변수에 별칭을 붙히는것
+    ref = b; //원래 값을 초기화 하면 다른 변수를 넣을 수 없다.
+
+    cout << b <<endl;
+
+    int* p = &a;
+    p = &b; //다른 주소를 대입하는게 가능하다.
+    
+    return 0;
+}
+```
+
 
 
 
