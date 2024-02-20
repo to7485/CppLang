@@ -434,6 +434,18 @@ int main(){
 }
 ```
 
+# 절차지향 vs 객체지향
+
+## 절차지향(Procedure Oriented Program)
+- 함수 위주의 프로그램
+- 데이터와 기능(함수)이 분리됨
+![image](image/절차지향.png)
+## 객체지향(Object Oriented Program : OOP)
+- 클래스 위주의 프로그램
+- 데이터와 기능(메서드) 합쳐짐
+
+![image](image/객체지향.png)
+
 # 구조체
 - 지금까지 사용한 int, float 등과 같은 자료형은 C++에 미리 정의되어 있는 기본 자료형이다.
 - 이와는 별개로 프로그래머가 필요에 따라 새로운 자료형을 정의할 수 있다.
@@ -455,64 +467,42 @@ struct 구조체명{
 ```
 
 ## 구조체 실습
-- 원의 면적을 구하기
-- 두 개의 원이 중첩되는지 검사하고 원의 정보 출력하기
+- 원의 넓이를 구하기
 
-### Circles1.cpp
+### 구조체.cpp
 ```c
 #include <iostream>
+#include <string>
+#include <cstdio>
+#include <string.h>
 
 using namespace std;
 
-const double PI = 3.141593;
+//C언어는 데이터와 기능이 분리된다.
+typedef struct{
+    int radius;
+    char color[30];
+}Circle1;
 
-struct C2dType { //2차원 좌표 구조체
-	double x, y; 
+//원의 넓이를 구하는 함수
+double cArea(Circle1* c){
+    return c -> radius * c -> radius * 3.14;
 };
 
-struct CircleType {
-	C2dType center; //중심좌표
-	double radius; //반지름
-};
+int main(){
 
-//원의 면적을 구하는 함수
-double circleArea(CircleType c) {
-	return c.radius * c.radius * PI;
-}
+    Circle1 a; //= {10, "red"};
+    a.radius = 10;
+    strcpy_s(a.color,30,"red");
+    printf("%.2f",cArea(&a));
 
-//두 원이 겹치는지 구하는 함수
-bool chkOverlap(CircleType c1, CircleType c2) { //두 개의 원을 매개변수로 받는다.
-	double dx = c1.center.x - c2.center.x;
-	double dy = c1.center.y - c2.center.y;
-	double dCntr = sqrt(dx*dx + dy * dy);
-	return dCntr < c1.radius + c2.radius;
-}
+    Circle2 b; //Circle2클래스의 객체 b
+    b.radius = 10;
+    b.color = "red";
+    //객체명.멤버명 -> 멤버참조연산자
+    cout << b.cArea() << endl;
 
-//원의 정보를 출력하는 함수
-void dispCircle(CircleType c) {
-	cout << " 중심 : (" << c.center.x << ", " << c.center.y << ")";
-	cout << " 반경 : " << c.radius << endl;
-}
-
-void main() {
-	CircleType c1 = { {0,0},10 }; //중심(0,0) 반지름 10으로 초기화
-	CircleType c2 = { {30,10},5 }; //중심(0,0) 반지름 10으로 초기화
-
-	cout << "원1" << endl;
-	dispCircle(c1);
-	cout << " 원1의 면적 : " << circleArea(c1) << endl;
-	cout << "원2" << endl;
-	dispCircle(c2);
-	cout << " 원2의 면적 : " << circleArea(c2) << endl << endl;
-
-	//두 원의 중첩 여부 출력
-	if (chkOverlap(c1, c2)) {
-		cout << "두 원은 중첩됩니다." << endl;
-	}
-	else {
-		cout << "두 원은 중첩되지 않습니다." << endl;
-	}
-
+    return 0;
 }
 ```
 
@@ -526,6 +516,46 @@ void main() {
 - 객체는 실세계의 문제영역에 존재하는 대상물을 그 대상물의 속성(attribute)과 메소드(method)로 모델링한 것이다.
 - 객체의 속성은 그 객체의 상태를 나타내는 데이터이며, 객체의 메소드는 내부의 데이터를 사용하여 정해진 동작을 하는 함수이다.
 - 사실 세상에 존재하는 모든 것들이 전부 대상이며, 어느 것은 객체로 표현되고 어느 것은 안 된다는 식으로 한계를 지을 수 없다.
+
+### 클래스1.cpp
+```c
+#include <iostream>
+#include <string>
+
+using namespace std;
+
+//클래스명은 관례상 첫글자가 대문자
+// class 클래스명 {
+// 접근지정자:
+//      멤버변수(필드);
+//      멤버함수(메서드);
+//}
+class Circle{
+public: //변수나 메서드명은 소문자
+    int radius; //클래스의 멤버변수
+    string color;
+
+    double cArea(){ //멤버함수, 메서드(method)
+        return radius * radius * 3.14;
+    }
+};
+
+int main(){
+
+    Circle c1;//Circle2클래스의 객체(인스턴스)b
+    c1.radius = 10;
+    c1.color = "red";
+    //객체명.멤버명 -> 멤버참조연산자
+    cout << c1.cArea() << endl;
+
+    Circle c2;
+    c2.radius = 20;
+    c2.color = "blue";
+    cout << c2.cArea() << endl;
+
+    return 0;
+}
+```
 
 # 메세지
 - 하나의 프로그램에 객체가 하나만 존재하는 경우는 거의 없다. 일반적으로 여러 개의 객체가 포함되어 있으며, 프로그램이 필요한 기능을 해내기 위해서는 이들이 상호작용해야만 한다.
@@ -561,6 +591,12 @@ class 클래스명{
   ...
 
 }
+```
+
+### 클래스1.cpp
+```c
+
+
 ```
 
 ## 접근제어자
