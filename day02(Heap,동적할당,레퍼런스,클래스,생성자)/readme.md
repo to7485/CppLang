@@ -303,16 +303,20 @@ using namespace std;
 
 int main(){
 
-    int a;
-    int b;
+    int a = 10;
+    int b = 10;
 
 
     //int& ref; 레퍼런스 변수는 초기화 하지 않으면 오류발생
     //int& ref = 10; 값을 직접 넣는것도 안된다.
-    int& ref = a;//변수에 별칭을 붙히는것
-    ref = b; //원래 값을 초기화 하면 다른 변수를 넣을 수 없다.
 
-    cout << b <<endl;
+    int& ref = a;//변수에 별칭을 붙히는것
+    ref = 20;
+    cout << "a=" << ref << endl;
+    
+    ref = b; //레퍼런스 변수가 참조하는 변수는 바뀌지 않음
+    ref = 20;
+    cout << "b="<< b <<endl;
 
     int* p = &a;
     p = &b; //다른 주소를 대입하는게 가능하다.
@@ -384,7 +388,50 @@ void main(){
 
 ### 레퍼런스연습1.cpp
 ```c
+#include <iostream>
+#include <string>
 
+using namespace std;
+
+//레퍼런스 변수와 for-each문을 사용할 것
+//print();
+void print(int& a, int& b){
+    cout << "a="<< a <<", b="<< b <<endl;
+}
+//swap();
+void swap(int& a, int& b){
+    int temp = a;
+    a = b;
+    b = temp;
+}
+//one();
+void one(int* arr, int size){
+   for(int i = 0; i < size; i++){
+        arr[i] = 1;
+    }
+}
+//printarr();
+void printarr(int* arr,int size){
+    string s = "[ ";
+    for(int i = 0; i < size; i++){
+        s = s + to_string(arr[i])+" ";
+    }
+    s =  s + " ]";
+
+    cout << s << endl;
+}
+
+int main(){
+
+    int a = 10, b = 20;
+    print(a,b); //a=10, b=20 출력
+    swap(a,b); //a와 b의 값을 교환
+    print(a,b); //a=20, b=10 출력
+
+    int arr[] = {1,2,3,4,5};
+    one(arr,5); //arr의 모든 요소를 1로 변경
+    printarr(arr,5); //arr출력  [ 1 1 1 1 1 ]
+}
 ```
 
 # 구조체
