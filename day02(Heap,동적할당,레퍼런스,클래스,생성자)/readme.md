@@ -1,85 +1,3 @@
-# 구조체
-- 지금까지 사용한 int, float 등과 같은 자료형은 C++에 미리 정의되어 있는 기본 자료형이다.
-- 이와는 별개로 프로그래머가 필요에 따라 새로운 자료형을 정의할 수 있다.
-- 구조체를 사용자 정의 자료형이라고 할 수 있는데, 기본 자료형이나 앞서 선언된 사용자 정의 자료형을 이용하여 정의한다.
-
-### 구조체 생성 방법
-```c
-struct 구조체명{
-   Type1 변수명1;
-   Type2 변수명2;
-   ...
-}
-```
-- Type1, Type2는 기본 자료형의 하나일 수도 있고, 먼저 정의된 사용자 정의 자료형일 수도 있다.
-
-### 구조체 변수의 선언
-```c
-구조체명 변수명;
-```
-
-## 구조체 실습
-- 원의 면적을 구하기
-- 두 개의 원이 중첩되는지 검사하고 원의 정보 출력하기
-
-### Circles1.cpp
-```c
-#include <iostream>
-
-using namespace std;
-
-const double PI = 3.141593;
-
-struct C2dType { //2차원 좌표 구조체
-	double x, y; 
-};
-
-struct CircleType {
-	C2dType center; //중심좌표
-	double radius; //반지름
-};
-
-//원의 면적을 구하는 함수
-double circleArea(CircleType c) {
-	return c.radius * c.radius * PI;
-}
-
-//두 원이 겹치는지 구하는 함수
-bool chkOverlap(CircleType c1, CircleType c2) { //두 개의 원을 매개변수로 받는다.
-	double dx = c1.center.x - c2.center.x;
-	double dy = c1.center.y - c2.center.y;
-	double dCntr = sqrt(dx*dx + dy * dy);
-	return dCntr < c1.radius + c2.radius;
-}
-
-//원의 정보를 출력하는 함수
-void dispCircle(CircleType c) {
-	cout << " 중심 : (" << c.center.x << ", " << c.center.y << ")";
-	cout << " 반경 : " << c.radius << endl;
-}
-
-void main() {
-	CircleType c1 = { {0,0},10 }; //중심(0,0) 반지름 10으로 초기화
-	CircleType c2 = { {30,10},5 }; //중심(0,0) 반지름 10으로 초기화
-
-	cout << "원1" << endl;
-	dispCircle(c1);
-	cout << " 원1의 면적 : " << circleArea(c1) << endl;
-	cout << "원2" << endl;
-	dispCircle(c2);
-	cout << " 원2의 면적 : " << circleArea(c2) << endl << endl;
-
-	//두 원의 중첩 여부 출력
-	if (chkOverlap(c1, c2)) {
-		cout << "두 원은 중첩됩니다." << endl;
-	}
-	else {
-		cout << "두 원은 중첩되지 않습니다." << endl;
-	}
-
-}
-```
-
 # 메모리 영역
 - C++의 프로그램에서 사용하는 메모리는 일반적으로 4가지 영역으로 나눈다.
 
@@ -469,8 +387,87 @@ void main(){
 
 ```
 
+# 구조체
+- 지금까지 사용한 int, float 등과 같은 자료형은 C++에 미리 정의되어 있는 기본 자료형이다.
+- 이와는 별개로 프로그래머가 필요에 따라 새로운 자료형을 정의할 수 있다.
+- 구조체를 사용자 정의 자료형이라고 할 수 있는데, 기본 자료형이나 앞서 선언된 사용자 정의 자료형을 이용하여 정의한다.
 
+### 구조체 생성 방법
+```c
+struct 구조체명{
+   Type1 변수명1;
+   Type2 변수명2;
+   ...
+}
+```
+- Type1, Type2는 기본 자료형의 하나일 수도 있고, 먼저 정의된 사용자 정의 자료형일 수도 있다.
 
+### 구조체 변수의 선언
+```c
+구조체명 변수명;
+```
+
+## 구조체 실습
+- 원의 면적을 구하기
+- 두 개의 원이 중첩되는지 검사하고 원의 정보 출력하기
+
+### Circles1.cpp
+```c
+#include <iostream>
+
+using namespace std;
+
+const double PI = 3.141593;
+
+struct C2dType { //2차원 좌표 구조체
+	double x, y; 
+};
+
+struct CircleType {
+	C2dType center; //중심좌표
+	double radius; //반지름
+};
+
+//원의 면적을 구하는 함수
+double circleArea(CircleType c) {
+	return c.radius * c.radius * PI;
+}
+
+//두 원이 겹치는지 구하는 함수
+bool chkOverlap(CircleType c1, CircleType c2) { //두 개의 원을 매개변수로 받는다.
+	double dx = c1.center.x - c2.center.x;
+	double dy = c1.center.y - c2.center.y;
+	double dCntr = sqrt(dx*dx + dy * dy);
+	return dCntr < c1.radius + c2.radius;
+}
+
+//원의 정보를 출력하는 함수
+void dispCircle(CircleType c) {
+	cout << " 중심 : (" << c.center.x << ", " << c.center.y << ")";
+	cout << " 반경 : " << c.radius << endl;
+}
+
+void main() {
+	CircleType c1 = { {0,0},10 }; //중심(0,0) 반지름 10으로 초기화
+	CircleType c2 = { {30,10},5 }; //중심(0,0) 반지름 10으로 초기화
+
+	cout << "원1" << endl;
+	dispCircle(c1);
+	cout << " 원1의 면적 : " << circleArea(c1) << endl;
+	cout << "원2" << endl;
+	dispCircle(c2);
+	cout << " 원2의 면적 : " << circleArea(c2) << endl << endl;
+
+	//두 원의 중첩 여부 출력
+	if (chkOverlap(c1, c2)) {
+		cout << "두 원은 중첩됩니다." << endl;
+	}
+	else {
+		cout << "두 원은 중첩되지 않습니다." << endl;
+	}
+
+}
+```
 
 # 클래스
 - 구조체(struct)는 프로그램으로 표현하고자 하는 대상에 대한 데이터의 구조만을 정의하고 있다.
