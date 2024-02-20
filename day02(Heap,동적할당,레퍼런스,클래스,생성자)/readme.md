@@ -517,45 +517,6 @@ int main(){
 - 객체의 속성은 그 객체의 상태를 나타내는 데이터이며, 객체의 메소드는 내부의 데이터를 사용하여 정해진 동작을 하는 함수이다.
 - 사실 세상에 존재하는 모든 것들이 전부 대상이며, 어느 것은 객체로 표현되고 어느 것은 안 된다는 식으로 한계를 지을 수 없다.
 
-### 클래스1.cpp
-```c
-#include <iostream>
-#include <string>
-
-using namespace std;
-
-//클래스명은 관례상 첫글자가 대문자
-// class 클래스명 {
-// 접근지정자:
-//      멤버변수(필드);
-//      멤버함수(메서드);
-//}
-class Circle{
-public: //변수나 메서드명은 소문자
-    int radius; //클래스의 멤버변수
-    string color;
-
-    double cArea(){ //멤버함수, 메서드(method)
-        return radius * radius * 3.14;
-    }
-};
-
-int main(){
-
-    Circle c1;//Circle2클래스의 객체(인스턴스)b
-    c1.radius = 10;
-    c1.color = "red";
-    //객체명.멤버명 -> 멤버참조연산자
-    cout << c1.cArea() << endl;
-
-    Circle c2;
-    c2.radius = 20;
-    c2.color = "blue";
-    cout << c2.cArea() << endl;
-
-    return 0;
-}
-```
 
 # 메세지
 - 하나의 프로그램에 객체가 하나만 존재하는 경우는 거의 없다. 일반적으로 여러 개의 객체가 포함되어 있으며, 프로그램이 필요한 기능을 해내기 위해서는 이들이 상호작용해야만 한다.
@@ -593,12 +554,6 @@ class 클래스명{
 }
 ```
 
-### 클래스1.cpp
-```c
-
-
-```
-
 ## 접근제어자
 - 그 다음에 나열되는 데이터 멤버나 멤버함수들이 외부에 공개되는 범위를 나타낸다.
 - 다음 접근제어자가 나올 때까지 유효하다.
@@ -630,62 +585,307 @@ class 클래스명{
 클래스명 객체명1, 객체명2...;
 ```
 
-## Counter.h
-- 멤버로 숫자를 가지고 있다.
-- 멤버 함수로 값을 1씩 증가시키는 count(), 현재 값을 얻어오는 getValue(), 값을 0으로 만드는 reset()이 있다.
-
+### 클래스1.cpp
 ```c
-#ifndef COUNTER_H_INCLUDED
+#include <iostream>
+#include <string>
 
-#define COUNTER_H_INCLUDED
+using namespace std;
 
-class Counter {
-	int value; //접근제어자가 지정되지 않았지만, 디폴트인 private이 지정된다.
+//클래스명은 관례상 첫글자가 대문자
+// class 클래스명 {
+// 접근지정자:
+//      멤버변수(필드);
+//      멤버함수(메서드);
+//}
+class Circle{
+public: //변수나 메서드명은 소문자
+    int radius; //클래스의 멤버변수
+    string color;
 
-public:
-	void reset() {
-		value = 0;
-	}
-
-	void count() {
-		value += 1;
-	}
-
-	int getValue() const {
-		return value;
-	}
+    double cArea(){ //멤버함수, 메서드(method)
+        return radius * radius * 3.14;
+    }
 };
 
-	// const 멤버 함수 : 멤버 함수 내에서 데이터 멤베덜의 값을
-	//변경하지 않겠다.
+int main(){
 
-	//만일 const 멤버함수 내에서 데이터 멤버의 값을 수정하면 
-	//컴파일러가 오류 메세지를 보낸다.
+    Circle c1;//Circle2클래스의 객체(인스턴스)b
+    c1.radius = 10;
+    c1.color = "red";
+    //객체명.멤버명 -> 멤버참조연산자
+    cout << "c1의 면적 : " << c1.cArea() << endl;
 
+    Circle c2;
+    c2.radius = 20;
+    c2.color = "blue";
+    cout << "c2의 면적 : " << c2.cArea() << endl;
 
-#endif 
+    //변수는 하나의 데이터를 저장하지만
+    //객체는 데이터와 함께 기능을 저장할 수 있다.
+
+    return 0;
+}
 ```
 
-- 일반적으로 클래스를 선언할 때는 2개의 파일을 만든다.
-- 클래스 선언문이 포함된 헤더 파일
-- 클래스의 멤버함수들의 정의를 담고 있는 소스 프로그램 파일
+### 클래스연습1.cpp
+```c
+#include <iostream>
+#include <string>
 
-## CounterMain.cpp
+using namespace std;
+
+//Person클래스 만들기
+//멤버변수 : 이름,나이,키,몸무게
+//멤버함수 : 이름 나이 키 몸무게를 출력하는 print() 함수
+
+class Person{
+    public:
+        string name;
+        int age;
+        double height,weight;
+        void print(){
+            cout << name <<" " << age <<"세 " << height<<"cm " <<weight <<"kg "<<endl;
+        }
+};
+
+int main(){
+    Person p;
+    //이름, 나이,키, 몸무게를 저장
+    p.name = "홍길동";
+    p.age = 21;
+    p.height = 176.8;
+    p.weight = 69.2;
+    p.print();
+}
+
+```
+
+### 클래스연습2.cpp
+```c
+#include <iostream>
+#include <string>
+
+using namespace std;
+
+//Rectangle 클래스
+//멤버변수 : 가로 세로
+//멤버함수 : 면적을 반환하는 함수
+
+class Rectangle{
+    public:
+        int x,y;
+        int calcArea(){
+            return x * y;
+        }
+
+        void setXY(int a, int b){
+            x = a;
+            y = b;
+        }
+};
+
+int main(){
+
+    Rectangle a;
+
+    // a.x = 10;
+    // a.y = 7;
+
+    a.setXY(10,7);
+
+    cout << "넓이 " << a.calcArea() << endl;
+
+    return 0;
+}
+```
+
+### 클래스3.cpp
+```c
+#include <iostream>
+using namespace std;
+
+class A{
+    public:
+        int a;
+        void method(int a){
+            cout << this -> a <<endl;
+            //함수의 지역변수와 멤버변수의 이름이 겹칠때는
+            //this 포인터를 사용해서 멤버변수에 접근
+        }
+
+        void method(){
+            cout << a << endl;
+        }
+};
+
+int main(){
+    A b;
+    b.a = 10;
+    b.method(20);
+    b.method();
+
+
+    return 0;
+}
+```
+
+### 클래스4.cpp
+```c
+//객체지향의 개념들
+//캡슐화, 정보은닉, 상속, 다형성
+//캡슐화 -> class
+//정보은닉 -> 접근지정자 public, private
+
+#include <iostream>
+using namespace std;
+
+class B{
+    //public 레이블 아래 있는 멤버는 어디서든지 접근 가능
+    public:
+        int a = 10;
+        void print1(){};
+
+        void setB(int b){this -> b = b;}
+
+        int getB(){
+            return b;
+        }
+
+    //private 멤버는 클래스 내부에서만 접근가능
+    private:
+        int b = 20;
+        void print2(){};
+};
+
+int main(){
+    B c;
+    c.a = 15;
+    cout <<c.a <<endl;
+    c.print1();
+    //c.print2();
+
+    c.setB(25);//c.b = 25;
+    cout << c.getB() << endl;//cout <<c.b <<endl;
+
+}
+```
+
+### 클래스연습3.cpp
+```c
+//Car클래스
+//멤버변수(private) : speed, gear, color 
+//멤버함수(public) : speedUp(), speedDown(), printCar(), setSpeed(), getSpeed()
+
+#include <iostream>
+#include <string>
+
+using namespace std;
+
+
+class Car{
+    public:
+        //함수의 원형만 선언하고 class 외부에서 정의
+        void speedUp();
+        void speedDown();
+        void printCar();
+        int getSpeed();
+        void setSpeed(int speed);
+    private:
+        int speed, gear = 5;
+        string color = "white";
+};
+
+int main(){
+
+    Car car;
+    car.setSpeed(30);
+    car.printCar();
+    car.speedUp();
+    car.printCar();
+    car.speedDown();
+    car.printCar();
+    return 0;
+}
+//어느 클래스의 메서드인지를 namespace로 구분
+int Car::getSpeed(){
+    return speed;
+}
+
+void Car::setSpeed(int speed){
+    this -> speed = speed;
+}
+
+void Car::printCar(){
+    cout << color <<" 시속" << speed<<" ";
+    cout << gear <<"단기어"<<endl;
+}
+
+void Car::speedUp(){
+    speed += 20;
+}
+
+void Car::speedDown(){
+    speed -= 20;
+}
+
+
+```
+
+### 이름중복예.c
+```c
+#include <stdio.h>
+//C언어에서는 이름이 동일한 함수가 있으면 오류가 발생한다.
+void print(int a){
+    printf("%d\n",a);
+}
+
+void print(double a){printf("%f\n",a);}
+
+void print(char* a){
+    printf("%s\n",a);
+}
+
+int main(){
+
+    print(1);
+
+    return 0;
+}
+```
+
+### 클래스5.cpp
 ```c
 #include <iostream>
 
-#include "Counter.h"
 using namespace std;
 
-void main() {
-	Counter cnt; //Counter 객체의 정의
-	cnt.reset(); //숫자를 0으로 만듦
-  	//cout << "현재 값 : " << cnt.value << endl; 불가능
-	cout << "현재 값 : " << cnt.getValue() << endl;
-	cnt.count();
-	cnt.count(); //값을 1증가시킴
-	cout << "현재 값 : " << cnt.getValue() << endl;
+//c++에서는 중복된 이름의 함수나 메서드를 선언할 수 있다
+
+//메서드 오버로딩(Overloading)
+//단 매개변수의 형태가 달라야 한다.
+void print(int a){
+    cout << a <<endl;
 }
+
+void print(double a){
+    cout << a <<endl;
+}
+
+void print(char* a){
+    cout << a <<endl;
+}
+
+int main(){
+
+    print(1);
+    print(1.5);
+    print("apple");
+
+
+    return 0;
+}
+
 ```
 
 # 생성자
