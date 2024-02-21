@@ -1,149 +1,138 @@
 # 생성자
-- 객체의 속성(즉, 데이터 멤버)은 객체의 현재 상태를 나타내는 값이다.
-- 그러므로 처음 객체가 만들어졌을 때에는 그 객체의 초기 상태를 적절히 지정하여 두어야 한다.
-- Counter 객체가 만들어진 직후 value의 값은 적절한 초기화 과정을 거치지 않았기 때문에 우리가 예측할 수 없는 임의의 값이다.
-- 반드시 멤버함수 reset()을 먼저 호출하여 카운터의 초깃값을 0으로 만든 후 객체를 사용해야 올바른 결과를 얻을 수 있다.
-- CntMain.cpp의 7행에서 객체를 정의한 후 8행에서 곧바로 reset()을 호출하여 초기화를 한 것은 이러한 이유 때문이다.
-- 이와 같이 반드시 수행해야 하는 초기화 과정을 실수로 누락하면 프로그램은 올바로 동작하지 않는다.
-- 이러한 실수가 발생하지 않도록 초기화 과정을 자동화할 수 있다면 불필요한 에러를 유발하지 않을 수 있다.
-- 이러한 목적으로 사용할 수 있는 것이 생성자(constructor)이다.
-- 생성자는 객체가 생성될 때 수행할 작업을 정의하는 특수한 멤버함수로서, 객체를 정의하는 문장에 의해 자동적으로 호출된다.
-
-## 생성자의 선언
-```c
-class 클래스명{
-   ...
-
-public:
-  클래스명(매개변수){ -> 생성자
-
-  }
-
-  ...
-}
-```
-- 생성자는 기본적으로 일반 멤버함수와 유사하다.
-- 매개변수를 통해 인수를 전달받을 수 있으며, 여러 가지 방법으로 사용될 수 있도록 생성자를 다중정의할 수도 있다.
-
-### 생성자 생성 규칙
+- 객체가 생성될 때 자동으로 호출되는 메서드
+- 모든 클래스는 생성자를 보유함
+- 객체가 생성될 때 하고싶은 명령을 생성자 안에 정의
+- 보통은 필드를 초기화하는 작업을 정의함
 - 생성자는 클래스의 이름을 사용하여 선언한다.
 - 생성자의 머리부에는 반환 자료형을 표시하지 않는다.
 - 또한 몸체 내에서 return 명령으로 값을 반환할 수 없다.
 - public으로 선언한 생성자만 클래스 외부에서 객체를 만드는 데 사용할 수 있다.
 
-### Counter.h
+## 생성자의 선언
 ```c
-#ifndef COUNTER_H_INCLUDED
-
-#define COUNTER_H_INCLUDED
-
-class Counter {
-	int value;
-
+class 클래스명{
 public:
+  클래스명(매개변수){ -> 생성자
 
-	Counter() {
-		value = 0; -> 생성자
-	}
-//이와 같이 생성자를 선언하면 Counter 객체를 정의할 때 생성자가 자동적으로 동작하며,
-//이에 따라 value의 값이 0인 상태로 객체가 만들어진다.
-//CntMain.cpp의 main() 함수에서 객체를 정의한 후 멤버함수 reset()을 일부러 호출할 필요가 없다.
-
-	void reset() {
-		value = 0;
-	}
-
-	void count() {
-		value += 1;
-	}
-
-	int getValue() const {
-		return value;
-	}
-
-	// const 멤버 함수 : 멤버 함수 내에서 데이터 멤베덜의 값을
-	//변경하지 않겠다.
-
-	//만일 const 멤버함수 내에서 데이터 멤버의 값을 수정하면 
-	//컴파일러가 오류 메세지를 보낸다.
-};
-
-#endif 
-```
-
-### CounterMain.cpp
-```c
-#include <iostream>
-
-#include "Counter.h"
-using namespace std;
-
-void main() {
-	Counter cnt; //Counter 객체의 정의 - value는 자동으로 0이됨
-	//cnt.reset(); //숫자를 0으로 만듦
-	cout << "현재 값 : " << cnt.getValue() << endl;
-	cnt.count();
-	cnt.count(); //값을 1증가시킴
-	cout << "현재 값 : " << cnt.getValue() << endl;
+  }
 }
 ```
 
-## 초기화 리스트
-- 생성자가 하는 주요 작업으로는 데이터 멤버에 적절한 초깃값을 넣는 것이다.
-- 예를 들어 Counter 클래스의 생성자에서는 value에 0을 대입하여 객체 상태의 초깃값을 설정하고 있다.
-- 이와 같이 생성자에서 데이터 멤버의 값에 초깃값을 대입하는 것은 초기화 리스트(initializer list)를 이용하여 간결하게 표현할 수 있다.
-- 초기화 리스트는 <b>함수의 머리에 콜론(:)을 기입하고 '변수명{초깃값}' 또는  '변수명(초깃값)' 형태로 초깃값을 지정</b>한 것이다.
 
-### Counter.h 생성자 수정하기
-```c
-Counter(): value{0} {}
-```
-
-- 만일 초기화 항목이 여러 개 있을 때에는 쉼표(,)로 구분한다.
-
-### CounterM.h 생성하기
-```c
-#ifndef COUNTERM_H_INCLUDED
-#define	COUNTERM_H_INCLUDED
-
-class CounterM{ //클래스 CounterM의 선언 시작
-	const int maxValue; //private 값의 최대값 멤버변수
-	int value; //private 멤버 변수
-
-public:
-//최대값을 매개변수를 통해 전달받는다.
-	CounterM(int mVal) :maxValue{ mVal }, value{ 0 }{} //생성자
-	void reset() { //값을 0으로 만듦
-		value = 0;
-	}
-	void count() { //값을 1 증가시킴
-		value = value < maxValue ? value + 1 : 0;
-	}
-
-	int getValue() const{ //현재 값을 반환함
-		return value;
-	}
-};
-
-#endif 
-```
-### CntMMain.cpp
+### 생성자1.cpp
 ```c
 #include <iostream>
-#include "CounterM.h"
+
 using namespace std;
 
-void main() {
-//CounterM 클래스의 생성자는 1개의 int 값이 인수로 전달되어야 하므로
-//객체를 선언할 때 이에 해당되는 실 매개변수를 포함해야 한다.
-	CounterM cnt(9);
+class A{
+    public:
+		//만약 개발자가 클래스에 생성자를 정의하지 않은 경우 컴파일러가 기본생성자를 추가해준다.
+        //A(){};
+};
 
-	cout << "현재 값 : " << cnt.getValue() << endl;
-	for (int i = 0; i < 12; i++) {
-		cnt.count();
-//최댓값인 9까지 카운트하고 난 후 다시 계수를 하면 0으로 리셋되는 것을 볼 수 있다.
-		cout << "현재값 : " << cnt.getValue() << endl;
-	}
+class B{
+    public:
+        int a,b;
+
+		//기본(default)생성자 : 매개변수가 없는 생성자
+        B(){
+            cout <<"B클래스의 기본생성자"<<endl;
+            a = b = 0;
+            print();
+        }
+
+        //생성자도 오버로딩이 가능하다.
+        B(int c){
+            cout << "두번째 생성자" <<endl;
+            a = b = c;
+            print();
+        }
+
+        B(int c,int d){
+            cout << "세번째 생성자" <<endl;
+            a = c; b = d;
+            print();
+        }
+
+        void print(){
+            cout <<"a="<< a << " b="<<b<<endl;
+        }
+};
+
+int main(){
+    A a;
+    B b;
+    B b2(10);
+    B b3(20,30); //과거에 쓰던 방법
+    B b4{40,50}; //최신 방법
+	B b5 = {60,70}; //가능
+
+    return 0;
+
+}
+```
+
+### 생성자연습1.cpp
+```c
+//Student 클래스
+//필드 : 학번, 이름, 국,영,수 점수
+//생성자1 : 학번,이름을 인자로 받아 저장하고 국영수 점수를 0으로 초기화
+//생성자2 : 학번 이름 정수를 인자로 받아 저장하고 해당 점수로 국영수 점수 초기화 하기
+//생성자3 : 학번, 이름, 국,영,수 점수를 모두 인자로 받아 모든 필드 초기화하기
+//학번 이름, 국,영,수 점수를 출력하는 print()메서드 생성
+
+#include <iostream>
+#include <string>
+
+using namespace std;
+
+class Student{
+    public:
+        Student(int idx, string name){
+            this->idx = idx;
+            this->name = name;
+            kor = 0;
+            eng = 0;
+            mat = 0;
+            print();
+        }
+
+        Student(int idx, string name, int score){
+            this->idx = idx;
+            this->name = name;
+            kor = score;
+            eng = score;
+            mat = score;
+            print();
+        }
+
+        Student(int idx, string name, int kor, int eng, int mat){
+            this->idx = idx;
+            this->name = name;
+            this->kor = kor;
+            this->eng = eng;
+            this->mat = mat;
+            print();
+        }
+
+        void print(){
+            cout << "학번 : " << idx<< endl;
+            cout << "이름 : " << name << endl;
+            cout << "국어 : " << kor << endl;
+            cout << "영어 : " << eng << endl;
+            cout << "수학 : " << mat << endl;
+        }
+
+    private:
+        int idx, kor,eng,mat;
+        string name;
+};
+
+int main(){
+    Student a{20240001,"jaems"};
+    Student b{20240002,"wade",50};
+    Student c{20240003,"paul",90,80,88};
 }
 ```
 
@@ -168,181 +157,143 @@ public:
 };
 ```
 1. 소멸자는 클래스의 이름에 ‘~’를 붙여 선언한다.
-
 2. return 명령으로 값을 반환할 수 없으며, 함수 머리에 반환할 자료형을 표시하지 않는다.
-
 3. 매개변수를 포함할 수 없다.
-
 4. 소멸자는 다중정의할 수 없으며, 클래스에 하나만 정의한다.
-
 5. public 멤버로 선언하는 것이 일반적이다.1)
+6. 상속을 통해 파생 클래스를 정의하는 경우 virtual을 지정하여 가상함수가 되도록 하는 것이 좋다.
 
-6. 상속을 통해 파생 클래스를 정의하는 경우 virtual을 지정하여 가상함수가 되도록 하는 것이 좋다.2)
-
-## Person 클래스 만들기
-- 사람을 나타내는 클래스를 선언하고자 한다. 사람 객체는 ‘…에 사는 …입니다’라고 자신을 알릴 수 있으며, 주소를 변경할 수 있다.
-
-### Person 클래스가 가진 멤버변수
-|속성|비고|
-|----|-------|
-|char* name|이름을 저장한다.|
-|char* addr|주소를 저장한다.|
-
-### Person 클래스가 가진 메서드
-|메서드|비고|
-|----|-------|
-|Person(char* name, char* addr)|생성자|
-|~Person()|소멸자|
-|void print()|'~에 사는 ~입니다'라고 출력한다|
-|vod chAddr(char* newAddr) | 주소를 변경한다.|
-
-### Person.h
-- Person.h에서는 멤버함수들의 원형만 선언하고 있다.
+### 소멸자1.cpp
 ```c
-#ifndef PERSON_H_INCLUDED
-#define PERSON_H_INCLUDED
+//소멸자
 
-class Person {
-	char* name;
-	char* addr;
 
-public:
-	Person(const char* name, const char* addr);
-	~Person();
-	void print() const;
-	void chAddr(const char* newAddr);
+#include <iostream>
+using namespace std;
+class A{
+    public:
+        A(){cout <<"생성자"<<endl;}
+        ~A(){cout <<"소멸자"<<endl;}
 };
 
-#endif
+int main(){
+    A a;
+    return 0;
+}
 ```
 
-### Person.cpp
-- Person.cpp는 Person 클래스의 멤버함수들을 정의한다.
+### 생성자2.cpp
 ```c
 #include <iostream>
-#include <cstring>
-//Person.h를 삽입함으로써 Person 클래스가 선언되도록 하고 있다.
-#include "Person.h"
 
 using namespace std;
 
-//Person 클래스의 멤버함수들이 정의되는데, 이제는 Person 클래스 선언문의 외부에 위치하므로
-//각각의 함수들이 Person 클래스의 멤버임을 알려야 한다.
+class A{
+    public:
+        int a,b;
+        //A(int c,int d){
+        //   a = c;
+        //    b = d;
+        //};
 
-//이를 위해 멤버함수 이름 앞에 'Person::'을 기입하고 있다.
+					//멤버 초기화 리스트
+		A(int c,int d):a(c),b(d){};
+};
 
-Person::Person(const char* name, const char* addr) {
-//함수 내부에서 name이나 addr를 사용할 경우 형식 매개변수인 name이나 addr를 의미하게 된다
-//이 이름들이 데이터 멤버를 지칭하게 하고 싶다면 구체적으로 소속을 알려야 하는데, 한 가지 방법은 this라는 포인터를 사용하는 것이다.
-	//이름을 저장할 공간 할당
-	this->name = new char[strlen(name) + 1]; //this는 객체 자기 자신을 가리키는 포인터이다.
-	//데이터 멤버 name에 이름을 복사
-	strcpy(this->name, name);
-	//주소를 저장할 공간 할당
-	this->addr = new char[strlen(addr) + 1];
-	//데이터 멤버 addr에 주소를 복사
-	strcpy(this->addr, addr);
-	cout << "Person 객체 생성함(" << name << ")" << endl;
+
+int main(){
+    //A a; 개발자가 직접 생성자를 하나라도 정의한 경우,
+        // 컴파일러는 기본생성자를 추가하지 않음
+        //-> 정의한 생성자 형식에 맞게 객체를 생성해야함
+
+    A a{10,20};
+
+    cout << a.a<<" "<<a.b<<endl;
+    
+    return 0;
+
 }
-
-Person::~Person() {
-	cout << "Person 객체 제거함(" << name << ")" << endl;
-	delete[]name; //이름 저자공간 반납
-	delete[]addr; //주소 저장공간 반납
-}
-
-void Person::print() const {
-	cout << addr << "에 사는 " << name << "입니다" << endl;
-}
-
-void Person::chAddr(const char* newAddr) {
-	delete[] addr;
-	addr = new char[strlen(newAddr) + 1];
-	strcpy(addr, newAddr);
-}
-
-
 ```
 
-### PersonMain.cpp
+### 생성자연습2.cpp
 ```c
 #include <iostream>
-#include "Person.h"
+#include <string>
 using namespace std;
 
-void main() {
-	Person* p1 = new Person("이철수", "서울시 종로구");
-	Person* p2 = new Person("박은미", "강원도 동해시");
-	p1->print();
-	p2->print();
-	cout << endl << "주소 변경: ";
-	p2->chAddr("대전시 서구");
-	p2->print();
-	delete p1;
-	delete p2;
+//Car클래스
+//private멤버 : speed, gear -> int, color -> string
+//public메서드 생성자 -> 세가지를 인수로 받아서 필드를 초기화
+//           print() -> 생성자에서 호출
+//멤버 초기화 리스트를 사용하기
+
+class Car{
+    private:
+        int speed,gear;
+        string color;
+
+    public:
+        Car(int speed, int gear, string color): speed(speed),gear(gear),color(color)
+        {
+            print();
+        }
+        void print(){
+            cout << "speed : " << speed<<endl;
+            cout << "gear : " << gear<<endl;
+            cout << "color : " << color << endl;
+            cout << "---------------"<<endl;
+        }
+};
+
+int main(){
+    Car a(100,5,"red");
+    Car b(90,6,"blue");
+
+    return 0 ;
 }
 ```
-
-# 디폴트 생성자
-- 매개변수가 없는 생성자 또는 매개변수가 있지만 모두 디폴트 값이 있는 디폴트 인수만 포함하고 있는 생성자이다. 
-- Counter.h 파일의 Counter생성자는 매개변수를 가지고 있지 않으므로 디폴트 생성자이다.
-- 만일 클래스를 선언할 때 생성자를 선언하지 않으면 컴파일러는 아무런 일도 하지 않는 디폴트 생성자를 만든다.
-- 그러나 생성자를 하나라도 선언하면 이와 같은 디폴트 생성자를 자동으로 만들지 않으며
-- 객체를 정의할 때에는 선언된 생성자에 맞는 형식으로 정의하여야만 한다.
-- CounterM.h 파일의 클래스 CounterM은 8행에 1개의 매개변수를 갖는 생성자를 선언하였으므로 디폴트 생성자가 자동으로 만들어지지 않는다.
-- 그러므로 CounterM 클래스의 객체를 정의할 때에는 반드시 다음의 1번과 같이 인수를 포함하여야 한다.
-- Counter 클래스에서처럼 ②와 같이 인수가 없는 형식으로 객체를 정의하는 것은 허용되지 않는다.
-
-```c
-CounterM  cnt1(999); 	// 1. 0부터 999까지 카운트하는 계수기 객체 정의
-
-CounterM  cnt2; 	// 2. 에러 : CountM은 디폴트 생성자가 없음
-```
-
 
 # 복사 생성자
 - 같은 클래스의 객체를 복사하여 객체를 만드는 생성자이다.
 
 ## 컴파일러가 자동적으로 제공하는 복사 생성자. 
 - 만일 복사 생성자를 명시적으로 선언하지 않으면 컴파일러는 원본 객체의 멤버들을 그대로 복사하여 객체를 정의하는 복사 생성자를 자동으로 만든다.
-- 
+
+### 복사생성자.cpp
 ```c
-CounterM cnt4(99); 		// 1. 0부터 99까지 카운트하는 계수기 객체
+//얕은복사(shallow copy) -> 객체의 주소만 복사
+//깊은복사(Deep copy) -> 새로운 객체를 만들고 필드값을 복사
+	//복사 생성자를 정의하면 깊은복사를 할 수 있다.
+#include <iostream>
+#include <string>
 
-CounterM cnt5(cnt4); 	// 2. cnt4를 복사한 계수기 객체 cnt5 정의
+using namespace std;
 
-CounterM cnt6 = cnt4; 	// 3. cnt4를 복사한 계수기 객체 cnt6 정의
-```
-- cnt4는 데이터 멤버 maxValue와 value가 각각 99와 0인 상태로 정의될 것이다.
-- 그런데 CounterM에는 2번과 같이 CounterM 클래스의 객체가 인수인 생성자는 명시적으로 선언하지 않았다.
-- 컴파일러가 데이터 멤버를 1:1로 복사해 주는 복사 생성자를 자동적으로 만들어 놓기 때문에 2번과 같은 문장이 가능하며
-- cnt5 역시 maxValue는 99, value는 0이라는 값으로 초기화된다.
-- 3번의 문장은 대입이 아닌 초기화 문장이며, 이 경우에도 복사 생성자가 동작한다.
-- 다음의 문장과는 다르다.
-```c
-CounterM cnt7(99);
+class Ace{
 
-cnt7 = cnt4;  	// 4. 에러! 이 문장은 초기화 문장이 아닌 대입 연산자임
-```
-- 문장4는 대입 연산자가 적용되는 문장이다.
-- 컴파일러는 3과 같은 초기화와 4와 같은 대입을 다른 방법으로 취급한다.
-- const 데이터는 초기화는 가능하지만 대입은 할 수 없다.
+    public:
+        int a;
+        Ace(int b):a(b){cout <<"생성자"<<endl;}
 
-## 명시적으로 복사 생성자 정의하기
-- 주의할 점은 형식 매개변수가 그 클래스의 참조형이어야 한다는 것이다.
-- 문제는 객체에 필요한 메모리를 동적으로 할당받고 반납하도록 되어 있는 클래스에서 발생할 수 있다.
-```c
-class  CounterM {
+		//복사생성자
+		//매개변수가 다른 객체의 참조타입
+        Ace(Ace& other){
+            this->a = other.a;
+        }
 
-……
+        ~Ace(){
+            cout <<"소멸자"<<endl;
+        }
+};
 
-  CounterM(const CounterM& c)
+int main{
 
-    : maxValuec.maxValue, valuec.value
-
-……
-
- };
+    Ace a(10);
+    Ace b(a); //깊은복사
+	Ace c = a //얕은복사
+    
+    return 0;
+}
 ```
 
 ## vecF 클래스

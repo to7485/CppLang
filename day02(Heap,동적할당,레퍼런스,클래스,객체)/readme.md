@@ -783,7 +783,10 @@ class Car{
         void speedUp();
         void speedDown();
         void printCar();
+        //private멤버의 값을 리턴하는 메서드 -> 접근자(getter)
         int getSpeed();
+
+        //private 멤버의 값을 변경하는 메서드 -> 변경자(setter)
         void setSpeed(int speed);
     private:
         int speed, gear = 5;
