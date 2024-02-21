@@ -494,13 +494,7 @@ int main(){
     Circle1 a; //= {10, "red"};
     a.radius = 10;
     strcpy_s(a.color,30,"red");
-    printf("%.2f",cArea(&a));
-
-    Circle2 b; //Circle2클래스의 객체 b
-    b.radius = 10;
-    b.color = "red";
-    //객체명.멤버명 -> 멤버참조연산자
-    cout << b.cArea() << endl;
+    printf("%.2f",cArea(&a));s
 
     return 0;
 }
