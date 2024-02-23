@@ -76,8 +76,54 @@ int main(){
 
 ```
 
-### 랜덤클래스3.cpp
+### 랜덤클래스연습3.cpp
 ```c
+//최소 10명의 이름을 입력받고
+//청소 당번을 랜덤으로 2명 뽑으세요
+
+//이름 >> 홍길동
+//이름 >> 박길동
+// ....
+//홍길동 박길동 ... 십길동
+
+//청소당번1 : 김길동
+//청소당번2 : 홍길동
+
+#include <iostream>
+#include <string>
+#include <random>
+
+using namespace std;
+
+random_device a;
+uniform_int_distribution<int>dis(0,9);
+
+int main(){
+
+    string* name = new string[10];
+    int count = 0;
+    for(int i = 0 ; i <10; i++){
+        cout<<"이름 >> ";
+        cin >> name[i];
+        if(name[i] == "end")break;
+        count++;
+    }
+
+    random_device rd;
+    uniform_int_distribution<int>(0,count-1);
+
+    for(int i = 0; i < count; i++){
+        cout <<name[i] <<" ";
+    }
+    cout <<endl;
+    cout <<"청소당번1 : "<< name[dis(rd)] <<endl;
+    cout <<"청소당번2 : "<< name[dis(rd)] <<endl;
+
+    
+    return 0;
+}
+
+
 ```
 
 # 상속
