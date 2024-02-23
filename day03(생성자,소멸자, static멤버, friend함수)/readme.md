@@ -463,17 +463,23 @@ int main(){
 using namespace std;
 
 class Customer{
-public:
-    int cnum =0;
+    int cnum,mile;
     static int count;
-    int mile = 1000;
+public:
     Customer(){
         count++;
-        cnum = cnum + count;
+        cnum =count;
+        int mile = 1000;
         if(cnum ==5){
             this->mile = 5000;
         }
-        cout << cnum <<" " <<mile <<endl;
+
+        print();
+       
+    }
+
+    void print(){
+         cout << cnum <<" " <<mile <<endl;
         cout <<"------------"<<endl;
     }
 };
@@ -494,6 +500,7 @@ int main(){
 
 }
 
+
 ```
 
 ## static 함수
@@ -501,103 +508,112 @@ int main(){
 - 일반 멤버함수들은 객체가 정의되어야만 사용할 수 있지만, static 멤버함수는 객체가 정의되지 않아도 사용할 수 있다.
 - static 멤버함수에서는 객체가 정의되지 않아도 존재하는 static 데이터 멤버만 액세스할 수 있고, 일반 데이터 멤버는 액세스할 수 없다.
 
-## NamedObj 클래스 만들어보기
-- 이름을 갖는 객체를 만들 수 있는 NamedObj 클래스를 정의해보자.
-- 객체가 생성될 때 고유번호를 가지게 되는데, 이 번호는 NamedObj객체가 생성됨에 따라 1번부터 시작하여 차례로 부여되는 일련번호이다.
-- 객체는 자기 자신의 일련번호와 이름을 출력할 수 있으며, 현재 존재하는 NamedObj클래스의 객체 수를 구할 수 있다.
-
-### NamedObj 클래스의 메소드
-|메서드|비고|
-|----|-------|
-|NamedObj(const char* s)|생성자(이름을 s로 초기화함)|
-|~NamedObj()|소멸자|
-|void display()|ID와 이름을 출력한다.|
-|static int nObj()|현재 존재하는 객체의 수를 구한다.|
-
-### NameObj 클래스의 속성
-|속성|비고|
-|----|-------|
-|char* name|이름을 저장한다.|
-|int id|ID번호를 저장한다.|
-|static int nConstr|생성된 객체의 수|
-|static int nDestr|소멸된 객체의 수|
-
-## NamedObj.h
+### static멤버함수.cpp
 ```c
-#ifndef NAMEDOBJ_H_INCLUDED
-#define NAMEDOBJ_H_INCLUDED
 #include <iostream>
+#include <string>
 using namespace std;
 
-class NamedObj {
-	char *name;
-	int id;
+//static멤버함수( static메서드)
+//-> static 수식어가 붙은 멤버함수
+//-> 객체를 생성하지 않고도 사용가능
 
-	//static 데이터 멤버
-	static int nConstr;   // 생성된 객체의 수
-	static int nDestr;    // 소멸된 객체의 수
+class A{
+    int a;
+    static int b;
+    public:
+        void method1(){
+            //인스턴스 함수는 일반 변수나, 정적 변수 모두 접근 가능
+            a = 10;
+            b = 10;
+            cout <<"인스턴스 메서드" <<endl;
+        }
 
-public:
-	NamedObj(const char *s);  // 생성자
-
-	~NamedObj();			  // 소멸자
-
-	void display() const {   // 객체의 속성 출력
-		cout << "ID : " << id << " --> 이름 : " << name << endl;
-	}
-	static int nObj() {       //존재하는 객체 수 반환
-		return nConstr - nDestr;
-	}
+        static void method2(){
+            //정적 함수는 정적 변수만 접근 가능
+            //a = 10; 
+            b = 20;
+            cout << "static 메서드"<<endl;
+        }
 };
 
-#endif
+int A::b = 0;
+
+int main(){
+    //객체 대신 클래스명을 네임스페이스로 써야한다.
+    A::method2();
+
+    A* a = new A();
+    a->method1();
+    a->method2();
+
+    A b;
+    b.method1();
+    b.method2();
+
+    return 0;
+}
 ```
 
-## NamedObj.cpp
+### static멤버함수연습1.cpp
 ```c
-#include <cstring>
-#include "NamedObj.h"
 
-NamedObj::NamedObj(const char *s)
-{
-	name = new char[strlen(s) + 1]; //문자열을 복사할 공간을 할당한다.
-	strcpy(name, s);
-	id = ++nConstr;  // 생성된 객체의 수를 증가시키고 이를 ID로 부여한다.
-}
-
-NamedObj::~NamedObj()
-{
-	++nDestr;   // 소멸된 객체의 수를 증가시킨다.
-	delete[] name;
-}
-
-// static 데이터 멤버의 정의 및 초기화
-int NamedObj::nConstr = 0;
-int NamedObj::nDestr = 0;
-```
-
-## StaticDM.cpp
-```c
 #include <iostream>
-#include "NamedObj.h"
+#include <string>
+
 using namespace std;
 
-void f() {
-	NamedObj x("Third"); //세 번째 객체 생성
-	x.display(); //함수 반환 후 x는 소멸됨
-}
+class Person{
+    public:
+        string name;
+        string gender;
+        static int count;
+        static int man;
+        static int woman;
+        Person(string name, string gender){
+            this->name = name;
+            this->gender = gender;
+            count++;
+            if(this->gender == "남성") man++;
+            if(this->gender == "여성") woman++;
+        }
+
+        static void printCountAll(){
+            cout <<"총 "<< count<<"명 " << "남자 " << man<<"명 "<<"여자 "<< woman<<"명"<<endl;
+        }
+
+        static void printCountMan(){
+            cout << "총 남성" << man <<"명"<<endl;
+        }
+
+         static void printCountWoman(){
+            cout << "총 여성" << woman <<"명"<<endl;
+        }
+};
+
+int Person::count = 0;
+int Person::man = 0;
+int Person::woman = 0;
 
 
-void main() {
-	cout << "NamedObj 클래스의 객체 수 : " << NamedObj::nObj() << endl;
-	NamedObj a("First");  // 첫 번째 객체 생성
-	NamedObj b("Second"); // 두 번째 객체 생성
-	a.display();
-	b.display();
-	f();
-	NamedObj c("Fourth");
-	c.display();
-	cout << "NamedObj 크래스의 객체 수: "<< NamedObj::nObj() << endl;
+int main(){
+    Person p1{"james","남성"};
+    Person p2{"wade","남성"};
+    Person p3{"smith","남성"};
+    Person p4{"paul","남성"};
+    Person p5{"paul","남성"};
+    Person p6{"홍길동","여성"};
+    Person p7{"김길순","여성"};
+    Person p8{"홍길순","여성"};
+    Person p9{"일길순","여성"};
+    Person p10{"박길순","여성"};
+
+    Person::printCountAll(); //총 10명
+    Person::printCountMan(); //남자 5명
+    Person::printCountWoman(); //여자 5명
+
+
+    return 0;
 }
 ```
 
