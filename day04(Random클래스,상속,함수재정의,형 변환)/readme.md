@@ -1,3 +1,55 @@
+# Random클래스
+- 컴퓨터는 난수를 생성할 때 첫번째 수만 무작위로 정한다.
+- 나머지 수들은 그 수를 기반으로 여러가지 수학적 방법을 통해 마치 난수처럼 보이지만 실제로는 무작위로 생성된 것이 아닌 수열들을 만들어내게 된다.
+- 무작위로 정해진 첫번째 수를 시드(seed)라고 부르는데, C의 경우 srand를 통히 seed를 설정할 수 있다.
+- 난수를 발생시키는 클래스
+
+### 랜덤클래스.cpp
+```c
+#include <iostream>
+#include <random>
+using namespace std;
+
+int main(){
+	//시드값을 얻기 위한 random_device 객체 생성
+	random_device a;
+
+	//random_device를 통해 난수 생성 엔진을 초기화 한다.
+	mt19937 gen(a());
+
+	//1부터3까지 균등하게 나타나는 난수열을 생성하기 위해 균등분포 정의
+	uniform_int_distribution<int>(1,3);
+
+	for(int i = 0 ; i < 5; i;;){
+		cout <<"난수 : " << dis(gen) << endl;
+	}
+
+
+	return 0;
+}
+
+```
+
+### 랜덤클래스연습1.cpp
+```c
+//랜덤클래스를 사용하여
+//1 ~ 45 사이의 정수 6개를 랜덤으로 출력
+
+#include <iostream>
+#include <random>
+using namespace std;
+
+int main(){
+	random_device a;
+	uniform_int_distribution<int>dis(1,45);
+	uniform_int_distribution<double>dis(1.0,2.0);
+
+	for(int i =0; i< 6; i++){
+		cout <<dis(a) <<" "<<endl;
+	}
+}
+```
+
 # 상속
 - 객체지향 언어에서 상속(inheritance)은 계층관계를 사용하여 클래스 간의 속성 및 함수를 공유할 수 있도록 지원하는 매우 중요한 개념이다.
 - 한 클래스가 다른 클래스의 한 가지 구체적인 예에 해당할 때 이 클래스 간에 'is-a' 관계가 있다고 말한다.

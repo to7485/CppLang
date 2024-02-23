@@ -617,6 +617,25 @@ int main(){
 }
 ```
 
+# Random클래스
+- 난수를 발생시키는 클래스
+
+### 랜덤클래스.cpp
+```c
+#include <iostream>
+#include <random>
+using namespace std;
+
+int main(){
+
+	ramdom_device a;
+
+
+	return 0;
+}
+
+```
+
 # 클래스의 활용
 
 ## 문자를 저장하는 스택 클래스 - CharStack
