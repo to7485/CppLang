@@ -50,6 +50,36 @@ int main(){
 }
 ```
 
+### 랜덤클래스연습2.cpp
+```c
+//"red", "blue", "green"중 랜덤으로 10회 출력하시오.
+
+#include <iostream>
+#include <string>
+#include <random>
+
+using namespace std;
+
+random_device a;
+uniform_int_distribution<int>dis(0,2);
+
+int main(){
+
+    string color[3] = {"red","blue","green"};
+
+    for(int i = 0 ; i< 10; i++){
+        cout << color[dis(a)] <<endl;
+    }
+    
+    return 0;
+}
+
+```
+
+### 랜덤클래스3.cpp
+```c
+```
+
 # 상속
 - 객체지향 언어에서 상속(inheritance)은 계층관계를 사용하여 클래스 간의 속성 및 함수를 공유할 수 있도록 지원하는 매우 중요한 개념이다.
 - 한 클래스가 다른 클래스의 한 가지 구체적인 예에 해당할 때 이 클래스 간에 'is-a' 관계가 있다고 말한다.
