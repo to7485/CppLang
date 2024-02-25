@@ -657,7 +657,10 @@ int main(){
     cout << s <<endl;
 
     //()안의 문자열의 위치를 리턴
+    //찾는 문자열이 없으면 -1를 return
     cout << s.find("an")<<endl;
+
+    //find(찾을 문자열, 시작 index);
 
     //1번 인덱스부터 끝까지 리턴
     cout <<s.substr(1) << endl;
@@ -667,6 +670,95 @@ int main(){
 
     return 0;
 }
+```
 
+### string클래스연습1.cpp
+```c
+#include <iostream>
+#include <string>
+using namespace std;
+
+int main() {
+
+	string s = "banana";
+
+	//replace(시작인덱스,글자수,치환할 문자열)
+	//s.replace(2, 2, "");
+	//cout << s;
+
+	string exp = "123+45";
+	cout << "수식>>";
+	cin >> exp;
+	int result = 0;
+
+	//수식을 입력하면 연산이 되는 코드 작성하기
+	//(실행예)
+	//수식 >> 111-22(엔터)
+	//89
+
+	if (exp.find("+") != -1) {
+		int index = exp.find("+");
+		int x = stoi(exp.substr(0, index));
+		int y = stoi(exp.substr(index+1, exp.length() - 1));
+
+		result = x + y;
+
+	}
+
+
+
+	//(실행예)
+	//수식>> 11-222(엔터)
+	// -211
+
+	if (exp.find("-") != -1) {
+		int index = exp.find("-");
+		int x = stoi(exp.substr(0, index));
+		int y = stoi(exp.substr(index + 1, exp.length() - 1));
+
+		result = x - y;
+
+	}
+
+	cout << "결과 : " << result << endl;
+	
+
+	return 0;
+}
+```
+
+### string클래스연습2.cpp
+```c
+#include <iostream>
+#include <string>
+using namespace std;
+
+int main() {
+
+	string address;
+
+	//(실행예)
+	//주소 >> 서울시 서대문구 창천동(엔터)
+	//시 : 인천시
+	//구 : 부평구
+	//동 : 작전동
+
+	cout << "주소 >>";
+	getline(cin, address);
+
+	int f1 = address.find(" ");
+	int f2 = address.find(" ", f1 + 1);
+
+	string s1 = address.substr(0, f1);
+	string s2 = address.substr(f1+1, f2 - f1 - 1);
+	string s3 = address.substr(f2 + 1, address.length() - f2 - 1);
+
+	cout << "시: " << s1 <<endl;
+	cout << "구: " << s2 << endl;
+	cout << "동: " << s3 << endl;
+
+
+	return 0;
+}
 
 ```
