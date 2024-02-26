@@ -492,6 +492,78 @@ int main() {
 
 ```
 
+### 다형성3.cpp
+```c
+#include <iostream>
 
+using namespace std;
+
+//추상(abstract)클래스
+class A {
+public:
+	//순수가상함수 -> body가 없는 가상함수(프로토타입 X)
+	virtual void func() = 0;
+};
+
+class B : public A{
+public:
+	//순수 가상함수를 재정의해야 한다.
+	void func() { cout << "B의 func()" << endl; };
+};
+
+int main() {
+
+	//A a; 추상클래스는 객체를 생성할 수 없음
+
+	//추상클래스를 상속한 클래스의 생성자로 객체를 생성
+	A* a = new B();
+	a->func();
+
+
+	return 0;
+}
+
+```
+
+### 다형성연습2.cpp
+```c
+#include <iostream>
+#include <string>
+using namespace std;
+
+//추상클래스 Animal 생성
+
+class Animal {
+public:
+	virtual void move() = 0;
+	virtual void eat() = 0;
+	virtual void speak() = 0;
+};
+
+class Lion : public Animal {
+public:
+	void move() { cout << "달린다" << endl; };
+	void eat() { cout << "고기" << endl; };
+	void speak() { cout << "으르렁" << endl; };
+};
+
+int main() {
+
+	Animal* a = new Lion();
+	a->move();// "달린다"출력
+	a->eat();// "고기"출력
+	a->speak();//"으르렁"출력
+
+	Lion c;
+	Animal& b = c;
+	b.move();
+	b.eat();
+	b.speak();
+
+
+	return 0;
+}
+
+```
 
 
