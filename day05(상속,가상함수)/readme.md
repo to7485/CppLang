@@ -318,14 +318,14 @@ public:
 
 };
 
-class CalPlus : Calculator {
+class CalPlus : public Calculator {
 public:
 	int calc(int x, int y) {
 		return x + y;
 	}
 };
 
-class CalMinus : Calculator {
+class CalMinus : public Calculator {
 public:
 	int calc(int x, int y) {
 		return x - y;
@@ -345,8 +345,152 @@ int main() {
 	return 0;
 }
 ```
+## 다중 상속
+- 파생 클래스는 1개 이상의 기초 클래스를 가질 수 있다.
+- 2개 이상의 기초 클래스를 상속받는 것을 다중상속(multiple inheritance)이라고 한다.
+- java나 c#과 같은 다른 객체지향언어에서는 다중상속을 허용하지 않는다.
+
+- c++에서는 쉼표(,)를 사용하여 상속받을 여러 개의 기초 클래스를 명시하는 것으로 간단히 다중 상속을 구현할 수 있다.
+```c
+class 파생클래스이름 : 접근제어지시자 기초클래스이름, 접근제어지시자 기초클래스이름, 접근제어지시자 기초클래스이름, ...
+
+```
+
+### 상속6.cpp
+```c
+#include <iostream>
+using namespace std;
+
+class A {
+public:
+	int a;
+};
+
+class B {
+public:
+	int a;
+	int b;
+
+};
+
+class C : public A, public B {
+
+};
 
 
+int main() {
+
+	C a;
+	//다중상속을 할 때 멤버의 이름이 겹치게 되면
+	//어느 클래스에서 온 멤버인지 네임스페이스로 명시해야 한다.
+	a.A::a = 10;
+	a.B::a = 15;
+	a.b = 20;
+
+	cout << a.A::a << endl;
+	cout << a.B::a << endl;
+	cout << a.b << endl;
+
+	return 0;
+}
+```
+
+# 다형성
+- 부모클래스의 포인터변수로 sub클래스들을 지정
+
+### 다형성1.cpp
+```c
+ #include <iostream>
+#include <string>
+using namespace std;
+
+class Shape {
+public:
+	//가상함수 -> virtual 수식어가 붙은 함수
+	virtual void draw() {
+		cout << "Shape Draw" << endl;
+	}
+};
+
+class Circle : public Shape {
+public:
+	void draw() {
+		cout << "Circle Draw" << endl;
+	}
+};
+
+class Rectangle : public Shape {
+public:
+	void draw() {
+	cout << "Rectangle Draw" << endl;
+	}
+};
+
+int main() {
+
+	Shape* p = new Circle();
+	//((Circle*)p)->draw();
+	p->draw();
+
+	Shape* p2 = new Rectangle();
+
+	//((Rectangle*)p2)->draw();
+	p2->draw();
+
+	return 0;
+}
+
+```
+
+## 가상함수
+- 파생클래스에서 재정의할것으로 기대되는 멤버함수
+- 자식 클래스에서 가상함수를 재정의하면 이전에 정의되었던 내용들은 모두 새롭게 정의된 내용들로 교체된다.
+- 부모 클래스에서 virtual 키워드를 사용해 가상 함수를 선언하면 자식 클래스에서 재정의된 멤버함수도 자동으로 가상함수가 된다.
+
+### 가상함수 호출방식
+- c++에서는 가상 함수가 아닌 일반 멤버 함수들의 호출은 컴파일할 때 고정된 메모리 주소로 변환된다 -> 정적바인딩
+- 가상 함수를 호출할 때는 컴파일러가 어떤 함수를 호출해야 하는지 미리 알 수 없다.
+- 가상함수는 프로그램이 실행될 때 객체를 결정하므로 컴파일 시점에 해당 객체를 특정할 수 없기 때문이다 -> 동적바인딩
+
+### 다형성연습1.cpp
+```c
+#include <iostream>
+#include <string>
+using namespace std;
+
+class Animal {
+public:
+	virtual void speak() {};
+};
+//Cat, Dog, Cow클래스 -> Animal클래스 상속
+
+class Cat :public Animal {
+public:
+	void speak() { cout << "야옹" << endl; }
+};
+class Dog :public Animal {
+public:
+	void speak() { cout << "멍멍" << endl; }
+};
+class Cow :public Animal {
+public:
+	void speak() { cout << "음메" << endl; }
+};
+
+int main() {
+
+	Animal* a = new Cat();
+	Animal* a = new Dog();
+	Animal* a = new Cow();
+
+	a->speak(); //야옹
+	b->speak(); //멍멍
+	c->speak(); //음메
+
+	return 0;
+}
+
+```
 
 
 
