@@ -224,3 +224,153 @@ int main(){
 
 }
 ```
+
+### 연산자오버로딩연습1
+- 위 코드 활용하기
+```c
+#include <iostream>
+#include <string>
+
+using namespace std;
+
+class Rect{
+private:
+    int w = 0; 
+    int h = 0;
+public:
+    Rect(int x, int y) : w(x),h(y){}
+   
+   double operator+(Rect a){
+        int result = w * h + a.w * a.h;
+        return (double)result;
+   }
+
+    void print(){
+        cout<<"가로 : " << w <<", 세로 : " << h <<endl;
+    }
+
+   Rect operator*(int a){
+        w = w * a;
+        h = h * a;
+
+        return *this;
+   }
+     
+};
+
+int main(){
+
+    Rect a(3,5);
+    Rect b(5,5);
+   
+    cout << a+b <<endl;
+
+    a.print();
+    a = a * 2; //* 정수 정수배만큼 가로세로길이를 늘린 객체를 반환
+    a.print();
+
+    return 0;
+
+}
+```
+
+### 연산자오버로딩연습2
+- 위 코드 활용하기
+```c
+#include <iostream>
+#include <string>
+
+using namespace std;
+
+class Rect{
+private:
+    int w = 0; 
+    int h = 0;
+public:
+    Rect(int x, int y) : w(x),h(y){}
+
+   double operator+(Rect a){
+        int result = w * h + a.w * a.h;
+        return (double)result;
+   }
+
+    // void print(){
+    //     cout<<"가로 : " << w <<", 세로 : " << h <<endl;
+    // }
+
+    void operator>(int a){
+       cout<<"가로 : " << w <<", 세로 : " << h <<endl;
+    }
+
+   Rect operator*(int a){
+        w = w * a;
+        h = h * a;
+
+        return *this;
+   }
+     
+};
+
+int main(){
+
+    Rect a(3,5);
+    Rect b(5,5);
+   
+    cout << a+b <<endl;
+
+    //a.print();
+    a > 1; // -> 가로 : X, 세로 : X 출력하기
+    a = a * 2; //* 정수 정수배만큼 가로세로길이를 늘린 객체를 반환
+    //a.print();
+    a > 1;
+
+    return 0;
+
+}
+```
+
+### 연산자오버로딩2.cpp
+```c
+#include <iostream>
+#include <string>
+
+using namespace std;
+
+class Num{
+private:
+    int a;
+public:
+    Num(int x):a(x){};
+
+    int operator^(int b){
+        int temp = 1;
+        for(int i = 0 ; i<b ;i++){
+            temp = temp * a;
+        }
+        
+        return temp;
+    }
+
+    int operator-(int b){
+        return a + b;
+    }
+};
+
+
+int main(){
+
+    Num b(2);
+
+    //1)b의 3제곱
+    int a = b^3;
+
+    cout << a <<endl; //8
+
+
+    //2)2 + 3;
+    a = b - 3; 
+    cout << a << endl; //5
+
+    return 0;
+}
+```
